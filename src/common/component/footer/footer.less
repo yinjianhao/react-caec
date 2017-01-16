@@ -1,0 +1,45 @@
+#ui-footer {
+    position: absolute;
+    bottom: 0;
+    height: 50px;
+    background-color: #f6f6f6;
+    z-index: 100;
+    line-height: 1;
+    .ui-tab-item {
+        display: table-cell;
+        width: 1%;
+        color: #646464;
+        text-align: center;
+        vertical-align: middle;
+        padding-top: 6px;
+        &.active {
+            .ui-detailicon, .ui-footer-name {
+                color: #03a9f4
+            }
+        }
+    }
+    .ui-detailicon {
+        font-size: 25px;
+        font-family: "iconfont";
+    }
+    .ui-footer-name {
+        margin-bottom: 4px;
+        margin-top: 3px;
+        font-size: 10px;
+    }
+}
+
+.ui-footer-wrap {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    .ui-footer-body {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        bottom: 50px;
+        overflow: auto;
+    }
+}

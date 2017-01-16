@@ -3,8 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 
 import App from './App';
 import Index from '../demo/Index';
-import Swipe from '../demo/Swipe';
-import Swipe2 from '../demo/ReactSwipe';
+import Swipe from '../demo/ReactSwipe';
 import Iscroll from '../demo/Iscroll';
 
 import Home from '../home/Home';
@@ -15,10 +14,9 @@ const rootRoute = (
 	<Route path="/" component={App}>
 		<IndexRoute component={Home} />
 		<Route path="/demo" component={Index} />
-		<Route path="/swipe" component={Swipe} />
-		<Route path="/reactswipe" component={Swipe2} />
+		<Route path="/reactswipe" component={Swipe} />
 		<Route path="/iscroll" component={Iscroll} />
-		<Route path="/cart" component={Cart} />
+		<Route path="/cart" component={Cart} preset="" />
 		<Route path="/login" component={Login} />
 	</Route>
 )

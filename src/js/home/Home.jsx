@@ -5,6 +5,7 @@ import { withRouter } from 'react-router'
 import Swipe from '../../common/component/swipe/Swipe';
 import Tabs from '../../common/component/tabs/Tabs';
 import TabPane from '../../common/component/tabs/TabPane';
+import Footer, { WrapWithFooter } from '../../common/component/footer/Footer';
 import "./home.less"
 
 import img0 from './img/0.jpg';
@@ -29,21 +30,23 @@ export default class Home extends Component {
 
     initSwipe() {
         return this.props.swipeList.map(item => {
-            return <div key={item.id}>
-                <img style={{ width: '100%' }} src={item.img} />
-            </div>
+            return (
+                <div key={item.id}>
+                    <img style={{ width: '100%' }} src={item.img} />
+                </div>
+            )
         })
     }
 
     render() {
         return (
-            <div id="home">
-                <Swipe swipeOptions={{ auto: 5000, speed: 500 }} >
-                    {this.initSwipe()}
-                </Swipe>
-                <div className="grad">
-                    <ul>
-                        <ul>
+            <WrapWithFooter activeIndex="0">
+                <div id="home">
+                    <Swipe swipeOptions={{ auto: 5000, speed: 500 }} >
+                        {this.initSwipe()}
+                    </Swipe>
+                    <div className="grid">
+                        <ul id="nav">
                             <li className="buy col-20" data-value="3">
                                 <i className="icon icon-car-buy" style={{ 'backgroundColor': '#0378ec' }}></i>
                                 <div className="h5">我要买车</div>
@@ -66,9 +69,9 @@ export default class Home extends Component {
                                 <div className="h5">经销商查询</div>
                             </li>
                         </ul>
-                    </ul>
+                    </div>
                 </div>
-            </div>
+            </WrapWithFooter>
         );
     }
 }
