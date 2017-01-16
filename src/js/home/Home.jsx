@@ -3,9 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
 import Swipe from '../../common/component/swipe/Swipe';
-import Tabs from '../../common/component/tabs/Tabs';
-import TabPane from '../../common/component/tabs/TabPane';
-import Footer, { WrapWithFooter } from '../../common/component/footer/Footer';
+import ContainerWithFooter from '../../common/component/footer/ContainerWithFooter';
 import "./home.less"
 
 import img0 from './img/0.jpg';
@@ -25,6 +23,12 @@ export default class Home extends Component {
             { id: 2, img: img2 },
             { id: 3, img: img3 },
             { id: 4, img: img4 }
+        ],
+        sellList: [
+            { id: 0, img: 'http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/08/31/20/1472646301936.jpg' },
+            { id: 1, img: 'http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/08/31/21/1472650795953.jpg' },
+            { id: 2, img: 'http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/15/11/1479178933543.jpg' },
+            { id: 3, img: 'http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/15/11/1479178948032.jpg' },
         ]
     }
 
@@ -38,9 +42,38 @@ export default class Home extends Component {
         })
     }
 
+    initSell() {
+        const {sellList} = this.props;
+        const sell = [];
+
+        sell.push(
+            <div key={0} className="cars-item border-b">
+                <div className="car-img col-50">
+                    <div className="img-con">
+                        <img src={sellList[0].img} />
+                    </div>
+                </div>
+            </div>
+        );
+
+        for (let i = 1, l = sellList.length; i < l; i++) {
+            sell.push(
+                <div key={sellList[i].id} className="col-33 border-r cars-item" >
+                    <div className="hotCat">
+                        <div className="img-wrap lazyload">
+                            <img src={sellList[i].img} />
+                        </div>
+                    </div>
+                </div >
+            )
+        }
+
+        return sell;
+    }
+
     render() {
         return (
-            <WrapWithFooter activeIndex="0">
+            <ContainerWithFooter activeIndex={0}>
                 <div id="home">
                     <Swipe swipeOptions={{ auto: 5000, speed: 500 }} >
                         {this.initSwipe()}
@@ -69,9 +102,30 @@ export default class Home extends Component {
                                 <div className="h5">经销商查询</div>
                             </li>
                         </ul>
+
+                        <div id="selling">
+                            <div className="selling-title border-b">
+                                <div className="left">
+                                    <i className="icon-fire"></i>
+                                    <span className="h2">热销车</span>
+                                </div>
+                                <div className="right">
+                                    <span className="more-txt border-r h4">更多</span>
+                                    <span className="h4">APP专属</span>
+                                    <i className="icon icon-arrow-right-2"></i>
+                                </div>
+                            </div>
+                            <div className="featured row gutter-no">
+                                {this.initSell()}
+                            </div>
+                        </div>
+
+                        <div id="activitesBanner" className="lazyload">
+                            <img src="http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/12/02/1478888389867.jpg" />
+                        </div>
                     </div>
                 </div>
-            </WrapWithFooter>
+            </ContainerWithFooter>
         );
     }
 }

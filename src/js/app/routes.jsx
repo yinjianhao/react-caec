@@ -7,8 +7,10 @@ import Swipe from '../demo/ReactSwipe';
 import Iscroll from '../demo/Iscroll';
 
 import Home from '../home/Home';
-import Login from '../login/Login';
-import Cart from '../cart/Index';
+import Login from '../my/Login';
+import Cart from '../cart/Cart';
+import Activity from '../activity/Activity';
+import My from '../my/My';
 
 const rootRoute = (
 	<Route path="/" component={App}>
@@ -16,7 +18,9 @@ const rootRoute = (
 		<Route path="/demo" component={Index} />
 		<Route path="/reactswipe" component={Swipe} />
 		<Route path="/iscroll" component={Iscroll} />
-		<Route path="/cart" component={Cart} preset="" />
+		<Route path="/cart" component={Cart} />
+		<Route path="/activity" component={Activity} />
+		<Route path="/my" component={My} />
 		<Route path="/login" component={Login} />
 	</Route>
 )

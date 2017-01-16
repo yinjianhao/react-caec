@@ -7,26 +7,7 @@ import React, { Component, PropTypes } from 'react';
 import { withRouter, Link } from 'react-router';
 import classNames from 'classnames';
 import './footer.less';
-
-/**
- * footer配置
- */
-const config = {
-    "footers": [
-        {
-            "router": "/",
-            "name": "首页",
-            "offIcon": "icon-home",
-            "onIcon": "icon-home-fill"
-        },
-        {
-            "router": "/cart",
-            "name": "购物车",
-            "offIcon": "icon-cart",
-            "onIcon": "icon-cart-fill"
-        }
-    ]
-}
+import config from './config.js';
 
 /**
  * footer
@@ -78,34 +59,4 @@ export default class Footer extends Component {
             </footer>
         );
     }
-}
-
-/**
- * 带footer的容器
- */
-const WrapWithFooter = class WrapWithFooter extends Component {
-
-    static defaultProps = {
-        activeIndex: 0
-    }
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        let classes = classNames('ui-footer-wrap', this.props.className);
-        return (
-            <div className={classes}>
-                <div className="ui-footer-body">
-                    {this.props.children}
-                </div>
-                <Footer activeIndex={this.props.activeIndex}></Footer>
-            </div>
-        );
-    }
-}
-
-export {
-    WrapWithFooter
 }

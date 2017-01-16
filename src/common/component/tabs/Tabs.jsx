@@ -8,7 +8,7 @@ import './tabs.less';
 import TabNav from './TabNav';
 import TabContent from './TabContent';
 
-export default class Tabs extends Component {
+const Tabs = class Tabs extends Component {
 
     static propTypes = {
         className: PropTypes.string,
@@ -84,4 +84,30 @@ export default class Tabs extends Component {
             </div>
         );
     }
+}
+
+const TabPane = class TabPane extends Component {
+
+    static propTypes = {
+        tab: PropTypes.string.isRequired,
+        children: PropTypes.oneOfType([
+            PropTypes.arrayOf(PropTypes.node),
+            PropTypes.node
+        ])
+    }
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>{this.props.children}</div>
+        )
+    }
+}
+
+export {
+    TabPane,
+    Tabs
 }

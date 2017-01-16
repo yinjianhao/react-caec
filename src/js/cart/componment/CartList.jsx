@@ -88,7 +88,6 @@ export default class CartList extends Component {
                                 </div>
                             </div>
                     }
-
                 </div>
             </div>
         )

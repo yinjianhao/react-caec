@@ -1,0 +1,39 @@
+.loading-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 9999;
+    /* background-color: rgba(66,66,66,0.2); */
+    display: none;
+    &.active {
+        display: block;
+    }
+    #loading {
+        text-align: center;
+        width: 85px;
+        height: 75px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -60%);
+        -webkit-transform: translate(-50%, -60%);
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 999;
+        border-radius: 10px;
+    }
+    .loadImg {
+        margin-top: 20px;
+        width: 60%;
+        max-width: 100;
+        margin-bottom: 8px;
+        height: auto;
+        max-height: 100%;
+    }
+    .loadContent {
+        font-size: 12px;
+        color: #fff;
+        text-align: center;
+    }
+}
