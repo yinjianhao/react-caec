@@ -6,40 +6,79 @@ import Tabs from '../../common/component/tabs/Tabs';
 import TabPane from '../../common/component/tabs/TabPane';
 import "./login.less"
 
-import img0 from './img/0.jpg';
-import img1 from './img/1.jpg';
-import img2 from './img/2.jpg';
-import img3 from './img/3.jpg';
-import img4 from './img/4.jpg';
-
 @connect()
 @withRouter
 export default class Login extends Component {
 
     static defaultProps = {
-        swipeList: [
-            { id: 0, img: img0 },
-            { id: 1, img: img1 },
-            { id: 2, img: img2 },
-            { id: 3, img: img3 },
-            { id: 4, img: img4 }
-        ]
+
     }
 
-    initSwipe() {
-        return this.props.swipeList.map(item => {
-            return <TabPane key={item.id} tab={item.id.toString()}>
-                <img style={{ width: '100%' }} src={item.img} />
-            </TabPane>
-        })
+    constructor(props) {
+        super(props);
+
+        this.state = {
+
+        }
     }
 
     render() {
         return (
             <div id="login">
-                <Tabs onChange={() => { console.log('change') } }>
-                    {this.initSwipe()}
-                </Tabs>
+                <div className="header">
+                    <i className="icon-arrow-left-2 go-back"></i>
+                    <h1>长安通行证登录</h1>
+                    <div id="btn_reg">注册</div>
+                </div>
+                <div className="container">
+                    <Tabs onChange={() => { console.log('change') } }>
+                        <TabPane tab="账户密码登录">
+                            <div className="login-psd">
+                                <div className="login_box_row border-b">
+                                    <div className="left h3">手机号</div>
+                                    <div>
+                                        <input className="h3" type="tel" placeholder="手机号码" maxLength="11" />
+                                        <div className="close-container"><i className="icon-cross close-icon"></i></div>
+                                    </div>
+                                </div>
+                                <div className="login_box_row">
+                                    <div className="left h3">密码</div>
+                                    <div>
+                                        <input className="h3" type="password" placeholder="密码" maxLength="16" />
+                                        <div className="close-container"><i className="icon-cross close-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="btn-wrap">
+                                <button className="btn-lg btn-secondary">登录</button>
+                            </div>
+                            <div className="retrievePasd h3">忘记密码?</div>
+                        </TabPane>
+                        <TabPane tab="短信验证码登录">
+                            <div className="login-sms">
+                                <div className="login-psd">
+                                    <div className="login_box_row border-b">
+                                        <div className="left h3">手机号</div>
+                                        <div>
+                                            <input className="h3" type="tel" placeholder="手机号码" maxLength="11" />
+                                            <div className="close-container"><i className="icon-cross close-icon"></i></div>
+                                        </div>
+                                    </div>
+                                    <div className="login_box_row">
+                                        <div className="left h3">短信验证码</div>
+                                        <div>
+                                            <input className="h3" type="password" placeholder="短信验证码" maxLength="16" />
+                                            <button className="retry btn-xs" disabled="disabled">发送验证码</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="btn-wrap">
+                                <button className="btn-lg btn-secondary">登录</button>
+                            </div>
+                        </TabPane>
+                    </Tabs>
+                </div>
             </div>
         );
     }

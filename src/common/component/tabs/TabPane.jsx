@@ -16,7 +16,7 @@ export default class TabPane extends Component {
 
     render() {
         return (
-            this.props.children
+            <div>{this.props.children}</div>
         )
     }
 }
