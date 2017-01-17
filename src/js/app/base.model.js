@@ -6,7 +6,7 @@ const basePath = 'https://ssl.mall.changan.com.cn';
 const baseType = 'base/loadData';
 
 const RELOGIN = 'base/reLogin';
-const token = 'DXc6leZ988vrZWRN2qlVQkmRQHAn1QAa';
+const token = 'So6wjbkDChlIBSeajfovGOfrRMUiPwji';
 
 const model = {
     name: 'base',

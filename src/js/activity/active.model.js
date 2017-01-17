@@ -14,7 +14,7 @@ const model = {
     reducers: createReducer([], {
         ACTIVITY_LIST(state, action) {
             let activityList = action.payLoad.response.data;
-            return { ...state, isLoading: false, activityList }
+            return { ...state, activityList }
         },
         LOADING(state, action) {
             return { isLoading: action.payLoad.isLoading }

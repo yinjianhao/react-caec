@@ -1,0 +1,139 @@
+.my {
+    // background-color: #03a9f4;
+    .visibile {
+        display: block !important;
+    }
+    .hidden {
+        display: none !important;
+    }
+    .myHead {
+        position: relative;
+        width: 100%;
+        background: #03a9f4;
+        padding-top: 20px;
+        padding-bottom: 15px;
+    }
+    .user-head {
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        margin-left: 15px;
+        vertical-align: bottom;
+        background-color: #ffffff;
+    }
+    #name-tel {
+        vertical-align: text-top;
+        display: none;
+        margin-left: 5px;
+        color: #ffffff;
+        position: relative;
+        bottom: 2px;
+        &.show {
+            display: inline-block;
+            width: 70%;
+        }
+    }
+    .userName {
+        display: inline-block;
+        width: 100%;
+        font-size: 1.125rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .userTel .icon-phone-solid {
+        color: #ffffff;
+    }
+    .tel-cont {
+        font-size: 0.75rem;
+    }
+    #unLogin {
+        font-size: 1rem;
+        color: #ffffff;
+        display: none;
+        line-height: 60px;
+        padding-left: 10px;
+        &.show {
+            display: inline-block;
+        }
+    }
+    .myOrders {
+        margin-top: 10px;
+        width: 100%;
+        background-color: #ffffff;
+        font-size: 0.9375rem;
+    }
+    .allOrders {
+        height: 44px;
+        line-height: 44px;
+        padding-left: 10px;
+        >span {
+            color: #999;
+            position: absolute;
+            right: 27px;
+            top: 0;
+        }
+    }
+    .icon-arrow-right-2 {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        font-size: 17px;
+    }
+    .orders-items {
+        width: 100%;
+        font-size: 0;
+    }
+    .menu-item {
+        position: relative;
+        display: inline-block;
+        width: 19.5%;
+        font-size: 0.75rem;
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .menuIcon {
+        position: relative;
+        font-size: 24px;
+    }
+    .menu-text {
+        display: block;
+    }
+    .menu-count {
+        position: absolute;
+        font-size: 0.625rem;
+        min-width: 16px;
+        height: 16px;
+        line-height: 16px;
+        text-align: center;
+        border-radius: 8px;
+        background-color: #fc4c1d;
+        color: #ffffff;
+        top: -5px;
+        right: -8px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+    // .hidden {
+    //     display: none
+    // }
+    .goWhere {
+        width: 100%;
+        margin-top: 10px;
+        background-color: #ffffff;
+        >li {
+            position: relative;
+            border: 0;
+            background-color: initial;
+            height: 44px;
+            line-height: 44px;
+            font-size: 0.9375rem;
+            padding-left: 10px;
+            > span {
+                display: inline-block;
+                width: 100%;
+            }
+        }
+    }
+}

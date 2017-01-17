@@ -17,7 +17,7 @@ import routes from './routes';
 //choose the history that meet ur need
 const app = createApp({
 	plugins: [
-		router({ routes: routes, history: hashHistory }),
+		router({ routes: routes, history: browserHistory }),
 		i18n({ defaultLocale: null })
 	]
 });

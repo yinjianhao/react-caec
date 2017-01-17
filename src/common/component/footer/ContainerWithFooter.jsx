@@ -28,7 +28,7 @@ export default class ContainerWithFooter extends Component {
     }
 
     render() {
-        console.log('this.props.className',this.props.className);
+        // console.log('this.props.className',this.props.className);
         let classes = classNames('ui-footer-wrap', this.props.className);
         return (
             <div className={classes}>
