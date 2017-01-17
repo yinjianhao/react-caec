@@ -29,6 +29,22 @@ export default class My extends Component {
         }
     }
 
+    constructor(props) {
+        super(props);
+
+        this.handleHeadClick = this.handleHeadClick.bind(this);
+    }
+
+    handleHeadClick() {
+        const {isLogin, router} = this.props;
+
+        if (isLogin) {
+            alert('已经登录了');
+        } else {
+            router.push('/login');
+        }
+    }
+
     render() {
         const {isLogin} = this.props;
 
@@ -40,7 +56,7 @@ export default class My extends Component {
                 <ReactIScroll className="my" iScroll={iScroll}
                     options={this.props.options}>
                     <div>
-                        <div className="myHead">
+                        <div className="myHead" onClick={this.handleHeadClick}>
                             <img className="user-head" src="http://mall.changan.com.cn/goods-img/img/LogoImg/2016/11/02/1478095508338.jpg" />
                             <div id="name-tel" className={classes1}>
                                 <span className="userName">magic</span>

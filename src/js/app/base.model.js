@@ -3,10 +3,15 @@ import { select } from 'redux-saga/effects'
 import _ from 'lodash'
 
 const basePath = 'https://ssl.mall.changan.com.cn';
-const baseType = 'base/loadData';
+const baseType = 'base/ajax';
+const baseError = 'base/error';
 
 const RELOGIN = 'base/reLogin';
 const token = 'So6wjbkDChlIBSeajfovGOfrRMUiPwji';
+
+const ProcessData = function () {
+
+}
 
 const model = {
     name: 'base',
@@ -14,11 +19,11 @@ const model = {
         isLoading: false
     },
     sagas: {
-        *loadData(action, { update, put, call }) {
-            let {successType, successPayLoad = {}, errorType, noToken = false, url, params, type = 'GET'} = action.payLoad;
+        *ajax(action, { update, put, call }) {
+            let {successType, successPayLoad = {}, errorType = baseError, noToken = false, url, params, type = 'GET'} = action.payLoad;
             let data = {};
-
             let body = '', key;
+
             for (key in params) {
                 body = body + key + '=' + params[key] + '&';
             }
@@ -44,8 +49,8 @@ const model = {
             }
 
             const response = yield call(fetch, url, data);
-
-            if (response.statusText === 'OK') {
+            // console.log(response);
+            if (response.ok) {
                 const data = yield response.json().then(param => param);
 
                 if (data.result == -1) {
@@ -54,11 +59,16 @@ const model = {
                     // })
                     console.warn('token过期了！');
                 } else {
-                    successPayLoad.response = data;
-                    yield put({
-                        type: successType,
-                        payLoad: successPayLoad
-                    })
+                    if (successType) {
+                        successPayLoad.response = data;
+                        yield put({
+                            type: successType,
+                            payLoad: successPayLoad
+                        })
+                    }
+                    //  else {
+                    //     return data;
+                    // }
                 }
             } else {
                 yield put({
@@ -69,11 +79,47 @@ const model = {
                 })
             }
         },
+        *error(action, { update, put, call }) {
+            console.error('-------请求失败了哦!---------');
+        },
         *reLogin(action, { update, put, call }) {
 
         }
     }
 }
 
+const baseFetch = function (options) {
+    let {noToken = false, url, params, type = 'GET'} = options;
+
+    let data = {};
+    let body = '', key;
+
+    for (key in params) {
+        body = body + key + '=' + params[key] + '&';
+    }
+
+    if (!noToken) {
+        // body = body + key + '=' + window.localStorage.getItem('token');
+        body = body + 'token=' + token;
+    } else {
+        //去除最后一个&
+        body = body.substring(0, body.length - 1);
+    }
+
+    if (type === 'GET' || type === 'get') {
+        url = url + '?' + body;
+    } else {
+        data = {
+            method: type,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body
+        }
+    }
+
+    return fetch(url, data);
+}
+
 export default model
-export { basePath, baseType }
+export { basePath, baseType, baseFetch }
