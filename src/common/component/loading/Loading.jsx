@@ -5,7 +5,7 @@ import loadingImg from './img/dialog-loading.gif';
 
 export default class Loading extends Component {
 
-    static PropTypes = {
+    static propTypes = {
         isLoading: PropTypes.bool
     }
 

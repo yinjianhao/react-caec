@@ -5,12 +5,19 @@ import { getPlatform } from '../shared/utils/helper'
 import RTWapper from './RouteTransitionWapper'
 import classNames from 'classnames'
 
+@connect()
 @withRouter
 export default class App extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = getPlatform();
+	}
+
+	componentWillMount() {
+		this.props.dispatch({
+			type: 'SET_LOGIN'
+		})
 	}
 
 	render() {

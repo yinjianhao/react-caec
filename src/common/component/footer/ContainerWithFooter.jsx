@@ -1,10 +1,4 @@
-/**
- * Created by yin on 2017/1/16.
- * footer
- */
-
 import React, { Component, PropTypes } from 'react';
-import { withRouter, Link } from 'react-router';
 import classNames from 'classnames';
 import './footer.less';
 import Footer from './Footer';

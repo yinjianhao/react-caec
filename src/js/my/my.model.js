@@ -6,6 +6,7 @@ import moduleName from '../shared/utils/security.js';
 
 const PUBLICKEY_URL = `${basePath}/main/user/generatePublicKey`;
 const LOGIN_URL = `${basePath}/main/user/loginEncrypt`;
+const OVERVIEW_URL = `${basePath}/member/order/overview`;
 
 const model = {
     name: 'my',
@@ -14,7 +15,8 @@ const model = {
         userPhoto: '',
         token: '',
         mobile: '',
-        nickname: ''
+        nickname: '',
+        overview: {}
     },
     reducers: createReducer([], {
         ACTIVITY_LIST(state, action) {
@@ -22,8 +24,31 @@ const model = {
             return { ...state, activityList }
         },
         LOGIN(state, action) {
-            let {token, img, mobile, nickname} = action.payLoad.response.data;
+            let data = action.payLoad.response.data;
+            let {token, img, mobile, nickname} = data;
+
+            localStorage.setItem('info', JSON.stringify(data));
             return { ...state, token, mobile, nickname, userPhoto: img, isLogin: true }
+        },
+        LOGINOUT(state, action) {
+            localStorage.removeItem('info');
+            return { ...state, isLogin: false }
+        },
+        SET_LOGIN(state, action) {
+            let info = localStorage.getItem('info');
+            if (!info) {
+                return { ...state, isLogin: false }
+            }
+
+            info = JSON.parse(info);
+            let {token, img, mobile, nickname} = info;
+
+            return { ...state, token, mobile, nickname, userPhoto: img, isLogin: true }
+        },
+        SET_OVERVIEW(state, action) {
+            let overview = action.payLoad.response.data;
+
+            return { ...state, overview }
         }
     }),
     sagas: {
@@ -66,6 +91,16 @@ const model = {
                     }
                 });
             }
+        },
+        *overview(action, { update, put, call }) {
+            yield put({
+                type: baseType,
+                payLoad: {
+                    successType: 'SET_OVERVIEW',
+                    url: OVERVIEW_URL,
+                    type: 'GET'
+                }
+            });
         }
     }
 }

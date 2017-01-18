@@ -7,7 +7,6 @@ const baseType = 'base/ajax';
 const baseError = 'base/error';
 
 const RELOGIN = 'base/reLogin';
-const token = 'So6wjbkDChlIBSeajfovGOfrRMUiPwji';
 
 const ProcessData = function () {
 
@@ -23,6 +22,8 @@ const model = {
             let {successType, successPayLoad = {}, errorType = baseError, noToken = false, url, params, type = 'GET'} = action.payLoad;
             let data = {};
             let body = '', key;
+
+            const token = yield select(data => data.my.token);
 
             for (key in params) {
                 body = body + key + '=' + params[key] + '&';

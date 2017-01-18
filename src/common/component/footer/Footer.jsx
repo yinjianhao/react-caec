@@ -1,8 +1,3 @@
-/**
- * Created by yin on 2017/1/16.
- * footer
- */
-
 import React, { Component, PropTypes } from 'react';
 import { withRouter, Link } from 'react-router';
 import classNames from 'classnames';
@@ -54,7 +49,7 @@ export default class Footer extends Component {
 
     render() {
         return (
-            <footer id="ui-footer" className="border-t">
+            <footer className="ui-footer border-t">
                 {this._renderFooter()}
             </footer>
         );

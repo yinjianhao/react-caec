@@ -5,7 +5,13 @@ import { withRouter } from 'react-router'
 import { Tabs, TabPane } from '../../common/component/tabs/Tabs';
 import "./login.less"
 
-@connect()
+@connect(
+    state => {
+        return {
+            isLogin: state.my.isLogin
+        }
+    }
+)
 @withRouter
 export default class Login extends Component {
 
@@ -45,6 +51,20 @@ export default class Login extends Component {
             [name]: val
         })
     }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.isLogin) {
+            this.props.router.goBack();
+        }
+    }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     if (nextProps.isLogin) {
+    //         this.props.router.goBack();
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
     render() {
         let {phone, psd} = this.state;

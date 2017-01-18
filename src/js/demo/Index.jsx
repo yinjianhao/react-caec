@@ -22,6 +22,7 @@ export default class Index extends Component {
 			<div>
 				<mobiscroll.Time
 					ref="time"
+					theme="ios"
 					headerText={false}                    // More info about headerText: https://docs.mobiscroll.com/3-0-0_beta6/react/datetime#!opt-headerText
 					maxWidth={90}                         // More info about maxWidth: https://docs.mobiscroll.com/3-0-0_beta6/react/datetime#!opt-maxWidth
 					placeholder="Please Select..."
