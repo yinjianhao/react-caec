@@ -6,6 +6,7 @@ import moduleName from '../shared/utils/security.js';
 
 const PUBLICKEY_URL = `${basePath}/main/user/generatePublicKey`;
 const LOGIN_URL = `${basePath}/main/user/loginEncrypt`;
+const RELOGIN_URL = `${basePath}/main/user/relogin`;
 const OVERVIEW_URL = `${basePath}/member/order/overview`;
 
 const model = {
@@ -13,7 +14,6 @@ const model = {
     initialState: {
         isLogin: false,
         userPhoto: '',
-        token: '',
         mobile: '',
         nickname: '',
         overview: {}
@@ -25,10 +25,26 @@ const model = {
         },
         LOGIN(state, action) {
             let data = action.payLoad.response.data;
-            let {token, img, mobile, nickname} = data;
+            let {img, mobile, nickname, mod, exp} = data;
+            let {psd} = action.payLoad;
+            let publicKey = RSAUtils.getKeyPair(exp, '', mod); //公钥
+            let encodePsd = RSAUtils.encryptedString(publicKey, encodeURIComponent(psd)); //密文
 
+            data.encodePsd = encodePsd;
             localStorage.setItem('info', JSON.stringify(data));
-            return { ...state, token, mobile, nickname, userPhoto: img, isLogin: true }
+            return { ...state, mobile, nickname, userPhoto: img, isLogin: true }
+        },
+        RELOGIN(state, action) {
+            let {token, password, key} = action.payLoad.response.data;
+
+            let info = JSON.parse(localStorage.getItem('info'));
+            info.encodePsd = password;
+            info.token = token;
+            info.mod = key;
+
+            localStorage.setItem('info', JSON.stringify(info));
+
+            return state;
         },
         LOGINOUT(state, action) {
             localStorage.removeItem('info');
@@ -80,6 +96,9 @@ const model = {
                     type: baseType,
                     payLoad: {
                         successType: 'LOGIN',
+                        successPayLoad: {
+                            psd
+                        },
                         noToken: true,
                         url: LOGIN_URL,
                         type: 'POST',

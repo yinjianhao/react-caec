@@ -18,9 +18,7 @@ export default class CartItem extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleChange(event) {
-        const isChecked = event.target.checked;
-
+    handleChange(isChecked) {
         this.props.dispatch({
             type: 'CHECKED_ITEM',
             payLoad: {
@@ -55,7 +53,9 @@ export default class CartItem extends Component {
                 <div className="item-content">
                     <div className="list-item border-b">
                         <div className="good-top-ch1">
-                            <Checkbox isChecked={isChecked} onChange={this.handleChange}></Checkbox>
+                            <div className="checkbox-wrap">
+                                <Checkbox isChecked={isChecked} onChange={this.handleChange}></Checkbox>
+                            </div>
                             <div className="good-link border">
                                 <img className="good-img" src={img} />
                             </div>
@@ -74,9 +74,9 @@ export default class CartItem extends Component {
                                 <div className="good-original-price price-original h6"><span className="price-symbol">¥</span>{originalPrice}</div>
                             </div>
                             <div className="num-add-minus border">
-                                <div className="btn-count btn-sub btn-count-active" name="del" onClick={count > 1 && this.handleClick}>-</div>
+                                <div className="icon-minus btn-count btn-sub btn-count-active" name="del" onClick={count > 1 && this.handleClick}></div>
                                 <div className="good-num border-l border-r num-count-active">{count}</div>
-                                <div className="btn-count btn-add btn-count-active" name="add" onClick={count < stock && this.handleClick}>+</div>
+                                <div className="icon-add btn-count btn-add btn-count-active" name="add" onClick={count < stock && this.handleClick}></div>
                             </div>
                         </div>
                     </div>

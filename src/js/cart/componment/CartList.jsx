@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 
 import "../assets/index.less"
 
@@ -17,7 +18,7 @@ import CartItem from './CartItem'
         }
     }
 )
-
+@withRouter
 export default class CartList extends Component {
     static PropTypes = {
 
@@ -31,7 +32,8 @@ export default class CartList extends Component {
     };
 
     initList() {
-        if (this.props.cartList.length === 0) {
+        const {cartList} = this.props;
+        if (cartList.length === 0) {
             return (
                 <div>
                     没有商品哦!
@@ -39,7 +41,7 @@ export default class CartList extends Component {
             )
         } else {
             var that = this;
-            const list = this.props.cartList.map(function (item, index) {
+            const list = cartList.map(function (item, index) {
                 return <CartItem key={item.id} index={index} data={item}></CartItem>
             })
 
@@ -47,8 +49,7 @@ export default class CartList extends Component {
         }
     }
 
-    handleChange(event) {
-        const isAllChecked = event.target.checked;
+    handleChange(isAllChecked) {
 
         this.props.dispatch({
             type: 'IS_ALL_CHECKED',
@@ -64,29 +65,40 @@ export default class CartList extends Component {
         })
     }
 
+    handleConfirm = () => {
+        const {cartList, router} = this.props;
+
+        if (cartList.some(item => item.isChecked)) {
+            router.push('/confirm');
+        } else {
+            alert('请选择商品');
+        }
+    }
+
     render() {
         return (
-            <div>
-                <ul>
+            <div className="container">
+                <div style={{ height: '10px' }}></div>
+                <ul className="list-content">
                     {this.initList()}
                 </ul>
-                <div className="cart-footer">
-                    <div>
-                        <Checkbox isChecked={this.props.isAllChecked} onChange={this.handleChange}></Checkbox>
-                        <span>全选</span>
-                    </div>
+                <div className="cart-footer border-t">
+                    <div className="checkbox-all"><Checkbox isChecked={this.props.isAllChecked} onChange={this.handleChange}></Checkbox></div>
+                    <div className="check-all h5">全选</div>
                     {
                         this.props.isEdit ?
-                            <button onClick={this.handleDel}>删除</button>
+                            <button className="btn-sm btn-red-border" onClick={this.handleDel}>删除</button>
                             :
-                            <div>
-                                <button>去结算(<span>{this.props.checkedNum}</span>)</button>
-                                <div className="h5">
+                            <span>
+                                <button className="btn-sm btn-primary btn-inblock" onClick={this.handleConfirm}>去结算(<span>{this.props.checkedNum}</span>)</button>
+                                <div className="total-price h5">
                                     <span>合计:</span>
-                                    <span className="small-symbol h5 price-symbol">¥</span>
-                                    <span>{this.props.totalPrice}</span>
+                                    <span className="color-fd ">
+                                        <span className="h5 price-symbol">¥</span>
+                                        <span className="h2">{this.props.totalPrice}</span>
+                                    </span>
                                 </div>
-                            </div>
+                            </span>
                     }
                 </div>
             </div>
@@ -94,8 +106,11 @@ export default class CartList extends Component {
     }
 
     componentDidMount() {
-        this.props.dispatch({
-            type: 'cart/list'
-        })
+        const {cartList} = this.props;
+        if (cartList.length === 0) {
+            this.props.dispatch({
+                type: 'cart/list'
+            })
+        }
     }
 }

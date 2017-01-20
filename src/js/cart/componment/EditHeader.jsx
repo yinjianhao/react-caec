@@ -21,16 +21,7 @@ export default class EditHeader extends Component {
     constructor(props) {
         super(props);
 
-        this.handleBack = this.handleBack.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
-
-        this.state = {
-            isBack: true
-        }
-    };
-
-    handleBack(event) {
-        console.log('返回了');
     };
 
     handleEdit(event) {
@@ -41,12 +32,9 @@ export default class EditHeader extends Component {
 
     render() {
         return (
-            <div className="title">
-                {
-                    this.props.isBack && <span onClick={this.handleBack}>返回</span>
-                }
-                <span>{this.props.title}{this.props.totalNum > 0 ? `(${this.props.totalNum})` : ''}</span>
-                <span onClick={this.handleEdit}>{this.props.isEdit ? '完成' : '编辑'}</span>
+            <div className="ui-header">
+                <h1>{this.props.title}{this.props.totalNum > 0 ? `(${this.props.totalNum})` : ''}</h1>
+                <div className="edit" onClick={this.handleEdit}>{this.props.isEdit ? '完成' : '编辑'}</div>
             </div>
         )
     };

@@ -6,6 +6,7 @@ import _ from 'lodash'
 const CART_LIST_URL = `${basePath}/shoppingcart/cart/info`;
 const CART_LIST_DEL_URL = `${basePath}/shoppingcart/cart/clean`;
 const UPDATE_CART_NUM_URL = `${basePath}/shoppingcart/cart/modify`;
+const CONFIRM_URL = `${basePath}/main/order/unconfirm`;
 
 const model = {
     name: 'cart',
@@ -15,7 +16,8 @@ const model = {
         totalPrice: 0,
         isAllChecked: false,
         isEdit: false,
-        cartList: []
+        cartList: [],
+        confrimList: []
     },
     reducers: createReducer([], {
         EDIT(state, action) {
@@ -121,6 +123,11 @@ const model = {
             checkedNum = isAllChecked ? cartList.length : 0;
 
             return { ...state, isAllChecked, cartList, checkedNum, totalPrice }
+        },
+        CONFIRM_LIST(state, action) {
+            const confrimList = action.payLoad.response.data;
+
+            return { ...state, confrimList }
         }
     }),
     sagas: {
@@ -189,8 +196,32 @@ const model = {
                 }
             });
         },
-        *destroy() {
+        *confirm(action, { update, put, call }) {
+            const cartList = yield select(data => data.cart.cartList);
 
+            let data = cartList.filter(item => item.isChecked).map(item => {
+                return {
+                    "id": item.id,
+                    "count": item.count,
+                    "optionalInfo": []
+                }
+            })
+
+            // console.log(data);
+            yield put({
+                type: baseType,
+                payLoad: {
+                    successType: 'CONFIRM_LIST',
+                    successPayLoad: {
+
+                    },
+                    url: CONFIRM_URL,
+                    type: 'POST',
+                    params: {
+                        goods: JSON.stringify(data)
+                    }
+                }
+            });
         }
     }
 }
