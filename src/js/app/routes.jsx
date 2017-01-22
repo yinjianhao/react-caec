@@ -11,6 +11,7 @@ import Login from '../my/Login';
 import Cart from '../cart/Cart';
 import Confirm from '../cart/Confirm';
 import Dealer from '../cart/Dealer';
+import BuyType from '../cart/BuyType';
 import Activity from '../activity/Activity';
 import My from '../my/My';
 import Info from '../my/Info';
@@ -24,6 +25,7 @@ const rootRoute = (
 		<Route path="/cart" component={Cart} />
 		<Route path="/confirm" component={Confirm} />
 		<Route path="/dealer" component={Dealer} />
+		<Route path="/buyType" component={BuyType} />
 		<Route path="/activity" component={Activity} />
 		<Route path="/my" component={My} />
 		<Route path="/info" component={Info} />

@@ -105,6 +105,8 @@ export default class Dealer extends Component {
             disabled: !~this.state.checkIndex
         })
 
+        console.log('render');
+
         return (
             <ContainerWithHeader className="dealer" title="选择经销商">
                 <div className="up">

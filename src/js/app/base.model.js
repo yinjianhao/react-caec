@@ -19,7 +19,10 @@ const baseFetch = function (options) {
     }
 
     if (!noToken) {
-        body = body + 'token=' + JSON.parse(window.localStorage.getItem('info')).token;
+        let info = JSON.parse(window.localStorage.getItem('info'));
+        let token = info && info.token;
+
+        body = body + 'token=' + token;
     } else {
         //去除最后一个&
         body = body.substring(0, body.length - 1);

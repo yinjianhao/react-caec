@@ -1,11 +1,57 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import _ from 'lodash';
+import classNames from 'classnames';
 
-import "./confirm.less"
+import "./confirm.less";
 
 import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
-import Checkbox from './componment/Checkbox'
+import Loading from '../../common/component/loading/Loading';
+import Checkbox from './componment/Checkbox';
+
+class Goods extends Component {
+
+    render() {
+        const {data} = this.props;
+
+        return (
+            <div className="good-info car-info">
+                <div className="good-prop">
+                    <a className="good-link border"><img className="good-img" src={data.img} /></a>
+                    <div className="good-name h4 nowrap-multi">{data.name}</div>
+                    <div className="good-describe h5">{data.prop}</div>
+                    <div className="good-price">
+                        <div className="good-price-now">
+                            <span className="price-int-point price-symbol h5">¥</span><span className="price-int h4">{data.price}</span>
+                        </div>
+                        <div className="price-original h5"><span className="price-symbol">¥</span>{data.originalPrice}</div>
+                        <div className="good-num h6">×<span className="good-num-detail">{data.count}</span></div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
+class InfoItem extends Component {
+    render() {
+        const {label, onClick = () => { }, children, placeholder} = this.props;
+        const classes = classNames('info-content', { 'color-font': children });
+
+        return (
+            <div className="info-item h4 border-t" onClick={onClick}>
+                <div className="info-title">
+                    <span>{label}</span>
+                </div>
+                <div className={classes}>
+                    {children ? children : placeholder}
+                </div>
+                <i className="icon-arrow-right-2 right"></i>
+            </div>
+        )
+    }
+}
 
 @connect(
     state => {
@@ -43,9 +89,7 @@ export default class Confirm extends Component {
                 total: 0,
                 list: []
             },
-            receiving: {
-
-            }
+            receiving: {}
         }
 
         data.car.list = cars.map(item => {
@@ -53,19 +97,7 @@ export default class Confirm extends Component {
             data.car.total += item.pay;
 
             return (
-                <div key={item.id} className="good-info car-info">
-                    <div className="good-prop">
-                        <a className="good-link border"><img className="good-img" src={item.img} /></a>
-                        <div className="good-name h4 nowrap-multi">{item.name}</div>
-                        <div className="good-describe h5">{item.prop}</div>
-                        <div className="good-price">
-                            <div className="good-price-now">
-                                <span className="price-int-point price-symbol h5">¥</span><span className="price-int h4">{item.price}</span>
-                            </div>
-                            <div className="price-original h5"><span className="price-symbol">¥</span>{item.originalPrice}</div><div className="good-num h6">×<span className="good-num-detail">{item.count}</span></div>
-                        </div>
-                    </div>
-                </div>
+                <Goods key={item.id} data={item} />
             )
         })
 
@@ -74,18 +106,7 @@ export default class Confirm extends Component {
             data.part.total += item.price;
 
             return (
-                <div key={item.id} className="good-info part-info border-t">
-                    <div className="good-prop">
-                        <a className="good-link border"><img className="good-img" src={item.img} /></a>
-                        <div className="good-name h4 nowrap-multi">{item.name}</div>
-                        <div className="good-describe h5 nowrap-multi">{item.prop}</div>
-                        <div className="good-price">
-                            <div className="good-price-now"> <span className="price-int-point price-symbol h5">¥</span><span className="price-int h4">{item.price}</span></div>
-                            <div className="price-original h5"><span className="price-symbol">¥</span>{item.originalPrice}</div>
-                            <div className="good-num h6">×<span className="good-num-detail">{item.count}</span></div>
-                        </div>
-                    </div>
-                </div>
+                <Goods key={item.id} data={item} />
             )
         })
 
@@ -97,21 +118,26 @@ export default class Confirm extends Component {
     initDealer = () => {
         const {dealerList, dealerCheckIndex} = this.props;
         const data = dealerList[dealerCheckIndex];
-        console.log('dealerCheckIndex', dealerCheckIndex);
+        //todo 省市id转化
+        if (~dealerCheckIndex) {
+            return <div><div>重庆 重庆市</div><div className="nowrap-multi">{data.name}</div></div>
+        }
+    }
 
-        return (
-            ~dealerCheckIndex ?
-                <div className="info-content store-info">
-                    <div>重庆 重庆市</div><div className="nowrap-multi">{data.name}</div>
-                </div>
-                :
-                <div className="info-content store-info">请选择提车经销商</div>
-        )
+    initBuyType = () => {
+
     }
 
     render() {
-        const {car, part, receiving, total} = this.initList();
+        const {confirmList} = this.props;
 
+        if (_.isEmpty(confirmList)) {
+            return (
+                <ContainerWithHeader className="confirm" title="确认订单"><Loading></Loading></ContainerWithHeader>
+            )
+        }
+
+        const {car, part, receiving, total} = this.initList();
         return (
             <ContainerWithHeader className="confirm" title="确认订单">
                 <div className="container">
@@ -123,20 +149,9 @@ export default class Confirm extends Component {
 
                         {car.list}
 
-                        <div className="store h4 border-t" onClick={this.goDealer}>
-                            <div className="info-title store-title">
-                                <span>提车经销商</span>
-                            </div>
-                            {this.initDealer()}
-                            <i className="icon-arrow-right-2 right "></i>
-                        </div>
-                        <div className="person h4 car-person border-t">
-                            <div className="info-title person-title">
-                                <span>购买者类型</span>
-                            </div>
-                            <div className="info-content person-info car-person-info">个人/企业</div>
-                            <i className="icon-arrow-right-2 right"></i>
-                        </div>
+                        <InfoItem label="提车经销商" placeholder="请选择提车经销商" onClick={this.goDealer}>{this.initDealer()}</InfoItem>
+                        <InfoItem label="购买者类型" placeholder="个人/企业" onClick={this.goBuyType}>{this.initBuyType()}</InfoItem>
+
                         <div className="message h4 border-t">
                             <textarea className="message-content" maxLength="100" placeholder="买家留言：选填，100字以内" rows="1"></textarea>
                         </div>
@@ -177,6 +192,7 @@ export default class Confirm extends Component {
                             <div className="info-content invoice-info color-font">不需要发票</div>
                             <i className="icon-arrow-right-2 right"></i>
                         </div>
+
                         <div className="message h4 border-t">
                             <textarea className="message-content" maxLength="100" placeholder="买家留言：选填，100字以内" rows="1"></textarea>
                         </div>
@@ -242,6 +258,7 @@ export default class Confirm extends Component {
     }
 
     routerWillLeave = (route, hook) => {
+        //会导致离开之前再次render
         if (route.pathname === '/cart') {
             this.props.dispatch({
                 type: 'CLEAN_CONFIRM'
@@ -258,6 +275,10 @@ export default class Confirm extends Component {
 
     goDealer = () => {
         this.props.router.push('/dealer');
+    }
+
+    goBuyType = () => {
+        this.props.router.push('/buyType');
     }
 }
 

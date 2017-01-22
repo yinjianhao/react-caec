@@ -1,4 +1,4 @@
-﻿/*
+/*
  * RSA, a suite of routines for performing RSA public-key computations in JavaScript.
  * Copyright 1998-2005 David Shapiro.
  * Dave Shapiro
