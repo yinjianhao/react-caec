@@ -16,7 +16,7 @@ export default class Checkbox extends Component {
 
         this.handleChange = this.handleChange.bind(this);
 
-        // const {isChecked = false, className} = this.props;
+        // const {isChecked = false} = this.props;
 
         // this.state = {
         //     isChecked

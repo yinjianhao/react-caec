@@ -8,7 +8,6 @@ const baseError = 'base/error';
 
 const RELOGIN_URL = `${basePath}/main/user/relogin`;
 
-
 const baseFetch = function (options) {
     let {noToken = false, url, params, type = 'GET'} = options;
 

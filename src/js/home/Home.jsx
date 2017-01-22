@@ -74,7 +74,7 @@ export default class Home extends Component {
     render() {
         return (
             <ContainerWithFooter activeIndex={0}>
-                <div id="home">
+                <div id="home" className="container">
                     <Swipe swipeOptions={{ auto: 5000, speed: 500 }} >
                         {this.initSwipe()}
                     </Swipe>

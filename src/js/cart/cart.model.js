@@ -7,6 +7,7 @@ const CART_LIST_URL = `${basePath}/shoppingcart/cart/info`;
 const CART_LIST_DEL_URL = `${basePath}/shoppingcart/cart/clean`;
 const UPDATE_CART_NUM_URL = `${basePath}/shoppingcart/cart/modify`;
 const CONFIRM_URL = `${basePath}/main/order/unconfirm`;
+const DEALER_URL = `${basePath}/main/dealer/list`;
 
 const model = {
     name: 'cart',
@@ -17,7 +18,9 @@ const model = {
         isAllChecked: false,
         isEdit: false,
         cartList: [],
-        confrimList: []
+        confirmList: {},
+        dealerList: [],
+        dealerCheckIndex: -1
     },
     reducers: createReducer([], {
         EDIT(state, action) {
@@ -125,9 +128,22 @@ const model = {
             return { ...state, isAllChecked, cartList, checkedNum, totalPrice }
         },
         CONFIRM_LIST(state, action) {
-            const confrimList = action.payLoad.response.data;
+            const confirmList = action.payLoad.response.data;
 
-            return { ...state, confrimList }
+            return { ...state, confirmList }
+        },
+        CLEAN_CONFIRM(state, action) {
+            return { ...state, confirmList: {} }
+        },
+        DEALER_LIST(state, action) {
+            const dealerList = action.payLoad.response.data;
+
+            return { ...state, dealerList }
+        },
+        SET_CHECK_INDEX(state, action) {
+            const {dealerCheckIndex} = action.payLoad;
+
+            return { ...state, dealerCheckIndex }
         }
     }),
     sagas: {
@@ -220,6 +236,19 @@ const model = {
                     params: {
                         goods: JSON.stringify(data)
                     }
+                }
+            });
+        },
+        *dealer(action, { update, put, call }) {
+            const params = action.payLoad;
+
+            yield put({
+                type: baseType,
+                payLoad: {
+                    successType: 'DEALER_LIST',
+                    url: DEALER_URL,
+                    type: 'POST',
+                    params
                 }
             });
         }

@@ -10,7 +10,9 @@ import Checkbox from './componment/Checkbox'
 @connect(
     state => {
         return {
-            confrimList: state.cart.confrimList
+            confirmList: state.cart.confirmList,
+            dealerList: state.cart.dealerList,
+            dealerCheckIndex: state.cart.dealerCheckIndex
         }
     }
 )
@@ -19,10 +21,15 @@ export default class Confirm extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            isChecked: true,
+            dealerCheckIndex: this.props.dealerCheckIndex
+        }
     }
 
     initList = () => {
-        const {cars = [], parts = [], receiving = []} = this.props.confrimList;
+        const {cars = [], parts = [], receiving = []} = this.props.confirmList;
 
         const data = {
             total: cars.length + parts.length,
@@ -87,8 +94,22 @@ export default class Confirm extends Component {
         return data;
     }
 
-    render() {
+    initDealer = () => {
+        const {dealerList, dealerCheckIndex} = this.props;
+        const data = dealerList[dealerCheckIndex];
+        console.log('dealerCheckIndex', dealerCheckIndex);
 
+        return (
+            ~dealerCheckIndex ?
+                <div className="info-content store-info">
+                    <div>重庆 重庆市</div><div className="nowrap-multi">{data.name}</div>
+                </div>
+                :
+                <div className="info-content store-info">请选择提车经销商</div>
+        )
+    }
+
+    render() {
         const {car, part, receiving, total} = this.initList();
 
         return (
@@ -102,11 +123,11 @@ export default class Confirm extends Component {
 
                         {car.list}
 
-                        <div className="store h4 border-t">
+                        <div className="store h4 border-t" onClick={this.goDealer}>
                             <div className="info-title store-title">
                                 <span>提车经销商</span>
                             </div>
-                            <div className="info-content store-info">请选择提车经销商</div>
+                            {this.initDealer()}
                             <i className="icon-arrow-right-2 right "></i>
                         </div>
                         <div className="person h4 car-person border-t">
@@ -194,7 +215,7 @@ export default class Confirm extends Component {
                         </div>
                     </div>
                     <div className="agreement h4">
-                        <div className="checkbox-wrap"><Checkbox></Checkbox></div>
+                        <div className="checkbox-wrap"><Checkbox isChecked={this.state.isChecked} onChange={this.handleCheck}></Checkbox></div>
                         <span>本人同意并接受<span className="go-clause" style={{ color: '#03a9f4' }}>《长安商城服务条款》</span></span>
                     </div>
                 </div>
@@ -208,8 +229,36 @@ export default class Confirm extends Component {
     }
 
     componentDidMount() {
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
+
+        console.log(this.props.router);
+
         this.props.dispatch({
             type: 'cart/confirm'
         })
     }
+
+    routerWillLeave = (route, hook) => {
+        if (route.pathname === '/cart') {
+            this.props.dispatch({
+                type: 'CLEAN_CONFIRM'
+            })
+        }
+        // console.log('routerWillLeave', route, hook);
+    }
+
+    handleCheck = (isChecked) => {
+        this.setState({
+            isChecked
+        })
+    }
+
+    goDealer = () => {
+        this.props.router.push('/dealer');
+    }
 }
+
+
