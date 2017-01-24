@@ -18,16 +18,16 @@ import Info from '../my/Info';
 
 const rootRoute = (
 	<Route path="/" component={App}>
-		<IndexRoute component={Home} />
+		<IndexRoute component={Home} preset="fade" />
 		<Route path="/demo" component={Index} />
 		<Route path="/reactswipe" component={Swipe} />
 		<Route path="/iscroll" component={Iscroll} />
-		<Route path="/cart" component={Cart} />
+		<Route path="/cart" component={Cart} preset="fade" />
 		<Route path="/confirm" component={Confirm} />
-		<Route path="/dealer" component={Dealer} />
+		<Route path="/dealer(/:id)" component={Dealer} />
 		<Route path="/buyType" component={BuyType} />
-		<Route path="/activity" component={Activity} />
-		<Route path="/my" component={My} />
+		<Route path="/activity" component={Activity} preset="fade" />
+		<Route path="/my" component={My} preset="fade" />
 		<Route path="/info" component={Info} />
 		<Route path="/login" component={Login} />
 	</Route>

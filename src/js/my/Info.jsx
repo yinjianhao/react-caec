@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import className from 'classnames';
-import mobiscroll from "mobiscroll"
+import mobiscroll from "mobiscroll";
 import Loading from '../../common/component/loading/Loading';
 import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
 

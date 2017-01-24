@@ -18,18 +18,20 @@ class RouteTransitionWapper extends Component {
 		const newAction = nextProps.location.action;
 		const oldRoutePrese = routes[routes.length - 1].preset;
 		const newRoutePrese = nextProps.routes[routes.length - 1].preset;
-		let newPreset = "fade";
+		let newPreset;
 		if ("PUSH" === newAction) {
 			switch (newRoutePrese) {
-				case 'slide': newPreset = "slideLeft"; break;
 				case 'pop': newPreset = "pop"; break;
 				case 'fade': newPreset = "fade"; break;
+				case 'slide': newPreset = "slideLeft"; break;
+				default: newPreset = "slideLeft"; break;
 			}
 		} else if ('POP' === newAction) {
 			switch (oldRoutePrese) {
-				case 'slide': newPreset = "slideRight"; break;
 				case 'pop': newPreset = "pop"; break;
 				case 'fade': newPreset = "fade"; break;
+				case 'slide': newPreset = "slideRight"; break;
+				default: newPreset = "slideRight"; break;
 			}
 		}
 		this.setState({ usePreset: newPreset })

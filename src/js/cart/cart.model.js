@@ -140,10 +140,13 @@ const model = {
 
             return { ...state, dealerList }
         },
-        SET_CHECK_INDEX(state, action) {
-            const {dealerCheckIndex} = action.payLoad;
+        SET_DEALER(state, action) {
+            const {dealerCheckIndex, carIndex} = action.payLoad;
+            const tState = _.cloneDeep(state);
 
-            return { ...state, dealerCheckIndex }
+            tState.confirmList.cars[carIndex].dealer = tState.dealerList[dealerCheckIndex];
+
+            return { ...tState }
         }
     }),
     sagas: {

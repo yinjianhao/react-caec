@@ -2420,19 +2420,3 @@ footer ~ .container, .footer ~ .container {
 .btn-full:after {
   bottom: 0;
 }
-
-.header {
-  background-color: #fff;
-}
-
-.header h1 {
-  text-align: center;
-}
-
-.go-back {
-  width: 45px;
-  font-size: 23px;
-  float: left;
-  position: fixed;
-  padding-left: 12px;
-}

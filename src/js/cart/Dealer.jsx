@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import _ from 'lodash';
 import classNames from 'classnames';
 
 import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
@@ -88,12 +89,14 @@ export default class Dealer extends Component {
     handleConfirm = () => {
         const {checkIndex} = this.state;
         const {router, dispatch} = this.props;
+        const {index} = this.props.location.query;
 
         if (~checkIndex) {
             dispatch({
-                type: 'SET_CHECK_INDEX',
+                type: 'SET_DEALER',
                 payLoad: {
-                    dealerCheckIndex: checkIndex
+                    dealerCheckIndex: checkIndex,
+                    carIndex: index
                 }
             });
             router.goBack();
@@ -104,8 +107,6 @@ export default class Dealer extends Component {
         const classes = classNames('btn-lg btn-secondary btn-confirm', {
             disabled: !~this.state.checkIndex
         })
-
-        console.log('render');
 
         return (
             <ContainerWithHeader className="dealer" title="选择经销商">
@@ -129,6 +130,23 @@ export default class Dealer extends Component {
                 cityId: 268,
                 carId: 18335
             }
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {dealerList} = nextProps;
+        const {dealerId} = this.props.location.query;
+        let checkIndex = -1;
+
+        _.each(dealerList, (item, index) => {
+            if (item.dealerId == dealerId) {
+                checkIndex = index;
+                return false;
+            }
+        })
+
+        this.setState({
+            checkIndex
         })
     }
 }
