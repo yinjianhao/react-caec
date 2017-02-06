@@ -24,7 +24,7 @@ const model = {
     },
     reducers: createReducer([], {
         EDIT(state, action) {
-            let {isEdit} = state;
+            let { isEdit } = state;
             let isAllChecked = false;
             let cartList = _.cloneDeep(state.cartList);
 
@@ -52,8 +52,8 @@ const model = {
             }
         },
         CHECKED_ITEM(state, action) {
-            const {isChecked, index } = action.payLoad;
-            const {isEdit} = state;
+            const { isChecked, index } = action.payLoad;
+            const { isEdit } = state;
 
             const cartList = _.cloneDeep(state.cartList);
             cartList[index].isChecked = isChecked;
@@ -77,7 +77,7 @@ const model = {
             }
         },
         UPDATE_COUNT(state, action) {
-            const {handle, index } = action.payLoad;
+            const { handle, index } = action.payLoad;
             let cartList = _.cloneDeep(state.cartList);
             let totalPrice = state.totalPrice;
             const cartItem = cartList[index];
@@ -101,17 +101,17 @@ const model = {
             const totalNum = action.payLoad.response.total;
             const cartList = action.payLoad.response.data;
 
-            return { ...state, totalNum, cartList }
+            return {...state, totalNum, cartList }
         },
         UPDATE_CART_LIST(state, action) {
-            const {index} = action.payLoad;
+            const { index } = action.payLoad;
             const cartList = _.cloneDeep(state.cartList);
             _.pullAt(cartList, index);
 
-            return { ...state, cartList }
+            return {...state, cartList }
         },
         IS_ALL_CHECKED(state, action) {
-            const {isAllChecked } = action.payLoad;
+            const { isAllChecked } = action.payLoad;
             let checkedNum = 0;
             let totalPrice = 0;
 
@@ -125,32 +125,40 @@ const model = {
 
             checkedNum = isAllChecked ? cartList.length : 0;
 
-            return { ...state, isAllChecked, cartList, checkedNum, totalPrice }
+            return {...state, isAllChecked, cartList, checkedNum, totalPrice }
         },
         CONFIRM_LIST(state, action) {
             const confirmList = action.payLoad.response.data;
 
-            return { ...state, confirmList }
+            return {...state, confirmList }
         },
         CLEAN_CONFIRM(state, action) {
-            return { ...state, confirmList: {} }
+            return {...state, confirmList: {} }
         },
         DEALER_LIST(state, action) {
             const dealerList = action.payLoad.response.data;
 
-            return { ...state, dealerList }
+            return {...state, dealerList }
         },
         SET_DEALER(state, action) {
-            const {dealerCheckIndex, carIndex} = action.payLoad;
+            const { dealerCheckIndex, carIndex } = action.payLoad;
             const tState = _.cloneDeep(state);
 
             tState.confirmList.cars[carIndex].dealer = tState.dealerList[dealerCheckIndex];
 
-            return { ...tState }
+            return {...tState }
+        },
+        SET_BUYTYPE(state, action) {
+            const { info, carIndex } = action.payLoad;
+            const tState = _.cloneDeep(state);
+
+            tState.confirmList.cars[carIndex].buyType = info;
+
+            return {...tState }
         }
     }),
     sagas: {
-        *list(action, { update, put, call }) {
+        * list(action, { update, put, call }) {
             yield put({
                 type: baseType,
                 payLoad: {
@@ -164,10 +172,10 @@ const model = {
                 }
             });
         },
-        *update(action, { update, put, call }) {
+        * update(action, { update, put, call }) {
             const state = yield select();
 
-            const {index, handle, cartItemId} = action.payLoad;
+            const { index, handle, cartItemId } = action.payLoad;
             let count = (handle === 'del' ? -1 : 1) + state.cart.cartList[index].count;
 
             yield put({
@@ -187,7 +195,7 @@ const model = {
                 }
             });
         },
-        *del(action, { update, put, call }) {
+        * del(action, { update, put, call }) {
             const state = yield select();
             const cartList = state.cart.cartList;
             const cartItemIds = [];
@@ -215,7 +223,7 @@ const model = {
                 }
             });
         },
-        *confirm(action, { update, put, call }) {
+        * confirm(action, { update, put, call }) {
             const cartList = yield select(data => data.cart.cartList);
 
             let data = cartList.filter(item => item.isChecked).map(item => {
@@ -242,7 +250,7 @@ const model = {
                 }
             });
         },
-        *dealer(action, { update, put, call }) {
+        * dealer(action, { update, put, call }) {
             const params = action.payLoad;
 
             yield put({

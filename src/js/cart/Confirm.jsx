@@ -81,7 +81,31 @@ class Car extends Component {
     }
 
     initBuyType = () => {
+        const {buyType} = this.props.data;
 
+        //todo 省市id转化
+        if (buyType) {
+            if (buyType.type === 0) {
+                const {name, phone, card} = buyType;
+                return (
+                    <div>
+                        <div>{name}</div>
+                        <div>身份证：{card}</div>
+                        <div>手机：{phone}</div>
+                    </div>
+                )
+            } else {
+                const {company, license, agentName, agentPhone} = buyType;
+                return (
+                    <div>
+                        <div>{company}</div>
+                        <div>营业执照：{license}</div>
+                        <div>经办人姓名：{agentName}</div>
+                        <div>经办人手机：{agentPhone}</div>
+                    </div>
+                )
+            }
+        }
     }
 
     goDealer = () => {
@@ -91,7 +115,14 @@ class Car extends Component {
     }
 
     goBuyType = () => {
-        this.props.router.push('/buyType');
+        const {index} = this.props;
+        const info = this.props.data.buyType;
+        
+        if (info) {
+            this.props.router.push(`/buyType?index=${index}&info=${JSON.stringify(info)}`);
+        } else {
+            this.props.router.push(`/buyType?index=${index}`);
+        }
     }
 
     render() {
@@ -197,7 +228,7 @@ export default class Confirm extends Component {
                     key={index}
                     index={index}
                     data={item}
-                    />
+                />
             )
         })
     }
@@ -243,7 +274,6 @@ export default class Confirm extends Component {
 
         const price = this.countTotalProice();
         return (
-
             <ContainerWithHeader className="confirm" title="确认订单">
                 <ScrollContainer scrollKey="confirm">
                     <div className="container">

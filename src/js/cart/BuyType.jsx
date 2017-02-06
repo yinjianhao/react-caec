@@ -37,9 +37,23 @@ export default class BuyType extends Component {
     constructor(props) {
         super(props);
 
-        const {type = 0} = this.props.location.query;
+        let {info} = this.props.location.query;
+
+        if (info) {
+            info = JSON.parse(info);
+        } else {
+            info = { type: 0 }
+        }
+
         this.state = {
-            type
+            name: '',
+            phone: '',
+            card: '',
+            company: '',
+            license: '',
+            agentName: '',
+            agentPhone: '',
+            ...info
         }
     };
 
@@ -56,26 +70,35 @@ export default class BuyType extends Component {
     }
 
     initItem = () => {
-        const {type} = this.state;
+        const {type, name, phone, card, company, license, agentName, agentPhone} = this.state;
 
         if (type === 0) {
             return (
                 <ul className="wrap">
-                    <Item label="提车人名" type="text" maxLength="10" placeholder="请输入提车人名"></Item>
-                    <Item label="手机号" type="phone" maxLength="11" placeholder="请输入手机号"></Item>
-                    <Item label="身份证" type="text" maxLength="18" placeholder="请输入身份证"></Item>
+                    <Item label="提车人名" name="name" type="text" maxLength="10" placeholder="请输入提车人名" value={name} onChange={this.handleChange}></Item>
+                    <Item label="手机号" name="phone" type="phone" maxLength="11" placeholder="请输入手机号" value={phone} onChange={this.handleChange}></Item>
+                    <Item label="身份证" name="card" type="text" maxLength="18" placeholder="请输入身份证" value={card} onChange={this.handleChange}></Item>
                 </ul>
             )
         } else {
             return (
                 <ul className="wrap">
-                    <Item label="企业全称" type="text" maxLength="30" placeholder="请输入企业全称"></Item>
-                    <Item label="营业执照" type="text" maxLength="30" placeholder="请输入营业执照编号"></Item>
-                    <Item label="经办人姓名" type="text" maxLength="10" placeholder="请输入经办人姓名"></Item>
-                    <Item label="经办人手机" type="phone" maxLength="11" placeholder="请输入经办人手机"></Item>
+                    <Item label="企业全称" name="company" type="text" maxLength="30" placeholder="请输入企业全称" value={company} onChange={this.handleChange}></Item>
+                    <Item label="营业执照" name="license" type="text" maxLength="30" placeholder="请输入营业执照编号" value={license} onChange={this.handleChange}></Item>
+                    <Item label="经办人姓名" name="agentName" type="text" maxLength="10" placeholder="请输入经办人姓名" value={agentName} onChange={this.handleChange}></Item>
+                    <Item label="经办人手机" name="agentPhone" type="phone" maxLength="11" placeholder="请输入经办人手机" value={agentPhone} onChange={this.handleChange}></Item>
                 </ul>
             )
         }
+    }
+
+    handleChange = (event) => {
+        const name = event.currentTarget.getAttribute('name');
+        const value = event.currentTarget.value;
+
+        this.setState({
+            [name]: value
+        })
     }
 
     onSet = (event, inst) => {
@@ -88,7 +111,40 @@ export default class BuyType extends Component {
             })
         }
     }
- 
+
+    onConfirm = (event) => {
+        const {type, name, phone, card, company, license, agentName, agentPhone} = this.state;
+        const {router, dispatch} = this.props;
+        const {index} = this.props.location.query;
+        let info = null;
+
+        if (type === 0) {
+            info = {
+                type,
+                name,
+                phone,
+                card
+            }
+        } else {
+            info = {
+                type,
+                company,
+                license,
+                agentName,
+                agentPhone
+            }
+        }
+
+        dispatch({
+            type: 'SET_BUYTYPE',
+            payLoad: {
+                info,
+                carIndex: index
+            }
+        });
+        router.goBack();
+    }
+
     render() {
         return (
             <div className='ui-header-wrap buy-type'>
@@ -100,7 +156,7 @@ export default class BuyType extends Component {
                         display="bottom"
                         value={this.state.type}
                         onSet={this.onSet}
-                        >
+                    >
                         {this.initOption()}
                     </mobiscroll.Select>
                     <i className="icon-arrow-down-2 down"></i>
@@ -108,7 +164,7 @@ export default class BuyType extends Component {
                 <div className="ui-header-body">
                     {this.initItem()}
 
-                    <div className="btn-lg btn-full btn-secondary">确认</div>
+                    <div className="btn-lg btn-full btn-secondary" onClick={this.onConfirm}>确认</div>
                 </div>
             </div>
         )
