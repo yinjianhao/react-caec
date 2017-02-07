@@ -186,12 +186,29 @@ class Part extends Component {
         }
     }
 
+    initInvoice = () => {
+        const {invoice} = this.props;
+
+        if (!_.isEmpty(invoice)) {
+            return invoice.type ? invoice.company : '个人';
+        }
+    }
+
     goAddr = () => {
         const {address} = this.props;
         if (_.isEmpty(address)) {
             this.props.router.push(`/address`);
         } else {
             this.props.router.push(`/address?id=${address.id}`);
+        }
+    }
+
+    goInvoice = () => {
+        const {invoice} = this.props;
+        if (_.isEmpty(invoice)) {
+            this.props.router.push(`/invoice`);
+        } else {
+            this.props.router.push(`/invoice?type=${invoice.type}&company=${invoice.company ? invoice.company : ''}`);
         }
     }
 
@@ -207,7 +224,7 @@ class Part extends Component {
                 <InfoItem label="收货人信息" placeholder="请选择收货人" onClick={this.goAddr}>
                     {this.initAddress()}
                 </InfoItem>
-                <InfoItem label="发票信息" placeholder="不需要发票"></InfoItem>
+                <InfoItem label="发票信息" placeholder="不需要发票" onClick={this.goInvoice}>{this.initInvoice()}</InfoItem>
 
                 <div className="message h4 border-t">
                     <textarea className="message-content" maxLength="100" placeholder="买家留言：选填，100字以内" rows="1"></textarea>
@@ -227,6 +244,7 @@ class Part extends Component {
         return {
             confirmList: state.cart.confirmList,
             address: state.cart.address,
+            invoice: state.cart.invoice,
             dealerList: state.cart.dealerList
         }
     }
@@ -257,9 +275,9 @@ export default class Confirm extends Component {
     }
 
     initPart = () => {
-        const {confirmList: {parts = []}, address} = this.props;
+        const {confirmList: {parts = []}, address, invoice} = this.props;
 
-        return <Part data={parts} address={address} />
+        return <Part data={parts} address={address} invoice={invoice} />
     }
 
     countTotalProice = () => {

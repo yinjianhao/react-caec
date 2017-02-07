@@ -1,0 +1,84 @@
+.invoice {
+    .invoice-item {
+        background-color: #fff;
+        height: 45px;
+        line-height: 45px;
+        width: 100%;
+        padding-left: 10px;
+        font-size: 14px;
+        overflow-x: hidden;
+        &.invoice-item-last {
+            max-height: 200px;
+            min-height: 100px;
+            padding-top: 10px;
+            span {
+                vertical-align: top;
+                float: left;
+                position: relative;
+                line-height: normal;
+            }
+        }
+        &:first-child {
+            margin-top: 10px;
+        }
+    }
+    .bottom-line {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        >input {
+            width: 100%;
+            height: 44px;
+            text-align: right;
+            line-height: 30px;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 3px;
+            padding-right: 30px;
+            position: absolute;
+            padding-left: 100px;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0);
+            border: 0;
+        }
+    }
+    .checkbox {
+        position: relative;
+        top: 12px;
+        left: 0;
+        margin-right: 5px;
+        vertical-align: top;
+    }
+    .icon-arrow-down-2 {
+        position: absolute;
+        right: 10px;
+        top: 0;
+    }
+    .voice {
+        position: absolute;
+        z-index: 10;
+        color: #333;
+    }
+    .btn-full {
+        position: absolute;
+        bottom: 0;
+    }
+    textarea {
+        -webkit-touch-callout: auto !important;
+        user-select: auto !important;
+        -webkit-user-select: auto !important;
+        color: #1f1f1f;
+        resize: none;
+        width: 80%;
+        height: 80%;
+        position: relative;
+        left: 0;
+        right: 0;
+        border: none;
+        top: 0;
+        text-align: start;
+        line-height: normal;
+        font-size: 14px;
+        padding: 0 0 0 10px;
+    }
+}
