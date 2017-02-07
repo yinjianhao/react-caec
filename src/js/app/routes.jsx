@@ -15,6 +15,7 @@ import BuyType from '../cart/BuyType';
 import Activity from '../activity/Activity';
 import My from '../my/My';
 import Info from '../my/Info';
+import Address from '../my/Address';
 
 const rootRoute = (
 	<Route path="/" component={App}>
@@ -29,6 +30,7 @@ const rootRoute = (
 		<Route path="/activity" component={Activity} preset="fade" />
 		<Route path="/my" component={My} preset="fade" />
 		<Route path="/info" component={Info} />
+		<Route path="/address" component={Address} />
 		<Route path="/login" component={Login} />
 	</Route>
 )

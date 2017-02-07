@@ -117,7 +117,7 @@ class Car extends Component {
     goBuyType = () => {
         const {index} = this.props;
         const info = this.props.data.buyType;
-        
+
         if (info) {
             this.props.router.push(`/buyType?index=${index}&info=${JSON.stringify(info)}`);
         } else {
@@ -151,6 +151,7 @@ class Car extends Component {
     }
 }
 
+@withRouter
 class Part extends Component {
     renderParts = () => {
         const {data} = this.props;
@@ -172,6 +173,28 @@ class Part extends Component {
         return temp;
     }
 
+    initAddress = () => {
+        const {address} = this.props;
+
+        if (!_.isEmpty(address)) {
+            return (
+                <div>
+                    <div>{address.receiver} 手机：{address.mobile}</div>
+                    <div className="nowrap-multi">{address.address + ' ' + address.zip}</div>
+                </div>
+            )
+        }
+    }
+
+    goAddr = () => {
+        const {address} = this.props;
+        if (_.isEmpty(address)) {
+            this.props.router.push(`/address`);
+        } else {
+            this.props.router.push(`/address?id=${address.id}`);
+        }
+    }
+
     render() {
         const {list, freight, total} = this.renderParts();
 
@@ -181,9 +204,8 @@ class Part extends Component {
 
                 {list}
 
-                <InfoItem label="收货人信息" placeholder="请选择收货人">
-                    {/*<div>{receiving.receiver} 手机：{receiving.mobile}</div>
-                    <div className="nowrap-multi">{receiving.address + ' ' + receiving.zip} </div>*/}
+                <InfoItem label="收货人信息" placeholder="请选择收货人" onClick={this.goAddr}>
+                    {this.initAddress()}
                 </InfoItem>
                 <InfoItem label="发票信息" placeholder="不需要发票"></InfoItem>
 
@@ -204,6 +226,7 @@ class Part extends Component {
     state => {
         return {
             confirmList: state.cart.confirmList,
+            address: state.cart.address,
             dealerList: state.cart.dealerList
         }
     }
@@ -234,9 +257,9 @@ export default class Confirm extends Component {
     }
 
     initPart = () => {
-        const {parts = []} = this.props.confirmList;
+        const {confirmList: {parts = []}, address} = this.props;
 
-        return <Part data={parts} />
+        return <Part data={parts} address={address} />
     }
 
     countTotalProice = () => {
@@ -261,6 +284,64 @@ export default class Confirm extends Component {
 
         price.total = cars.length + parts.length;
         return price;
+    }
+
+    handleConfirm = () => {
+        let car = [], goods = [],
+            receiving = {}.receipt = {};
+
+        const {confirmList: {cars, parts}, address} = this.props;
+
+        cars.forEach((item, index) => {
+            var carsItem = {
+                goodsId: item.id,
+                goodsCount: item.count,
+                optionalIds: [],
+                dealerId: item.dealer.id,
+                orderMsg: ''
+            };
+
+            if (item.buyType.type === 0) {
+                carsItem.type = 0;
+                carsItem.receiver = item.buyType.name;
+                carsItem.mobile = item.buyType.phone;
+                carsItem.no = item.buyType.card;
+            } else {
+                carsItem.type = 1;
+                carsItem.receiver = item.buyType.agentName;
+                carsItem.mobile = item.buyType.agentPhone;
+                carsItem.no = item.buyType.license;
+                carsItem.name = item.buyType.company;
+            }
+
+            car.push(carsItem);
+        })
+
+        parts.forEach((item, index) => {
+            goods.push({
+                id: item.id,
+                count: item.count
+            });
+        })
+
+        receiving.receivingId = address.id;
+
+        const params = {
+            from: 1,
+            cars: JSON.stringify(car),
+            goods: JSON.stringify({
+                goods: goods,
+                orderMsg: ''
+            }),
+            receiving: JSON.stringify(receiving),
+            receipt: '{}',
+            coupon: '[]'
+        }
+
+        this.props.dispatch({
+            type: 'cart/confirmOrder',
+            payLoad: params
+        })
     }
 
     render() {
@@ -310,7 +391,7 @@ export default class Confirm extends Component {
                 <div className="confirm-order h5 border-t">
                     <span>合计 : </span>
                     <span className="color-default-red order-total"><span className="h5 price-symbol">¥</span><span className="h2">{price.goodsPrice}</span></span>
-                    <button className="btn-sm btn-primary confirm-btn">提交订单({price.total})</button>
+                    <button className="btn-sm btn-primary confirm-btn" onClick={this.handleConfirm}>提交订单({price.total})</button>
                 </div>
             </ContainerWithHeader>
 

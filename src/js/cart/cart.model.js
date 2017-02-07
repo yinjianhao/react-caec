@@ -7,6 +7,7 @@ const CART_LIST_URL = `${basePath}/shoppingcart/cart/info`;
 const CART_LIST_DEL_URL = `${basePath}/shoppingcart/cart/clean`;
 const UPDATE_CART_NUM_URL = `${basePath}/shoppingcart/cart/modify`;
 const CONFIRM_URL = `${basePath}/main/order/unconfirm`;
+const CONFIRM_ORDER_URL = `${basePath}/main/order/confirm`;
 const DEALER_URL = `${basePath}/main/dealer/list`;
 
 const model = {
@@ -20,7 +21,8 @@ const model = {
         cartList: [],
         confirmList: {},
         dealerList: [],
-        dealerCheckIndex: -1
+        dealerCheckIndex: -1,
+        address: {}
     },
     reducers: createReducer([], {
         EDIT(state, action) {
@@ -130,7 +132,13 @@ const model = {
         CONFIRM_LIST(state, action) {
             const confirmList = action.payLoad.response.data;
 
-            return {...state, confirmList }
+            let address = _.filter(confirmList.receiving, (item) => {
+                return item.isDeafault === 'Y';
+            })
+
+            address = address.length ? address[0] : {}
+
+            return {...state, confirmList, address }
         },
         CLEAN_CONFIRM(state, action) {
             return {...state, confirmList: {} }
@@ -155,6 +163,17 @@ const model = {
             tState.confirmList.cars[carIndex].buyType = info;
 
             return {...tState }
+        },
+        SET_CHECKED_ADDRESS(state, action) {
+            const { index } = action.payLoad;
+            const tState = _.cloneDeep(state);
+
+            tState.address = tState.confirmList.receiving[index];
+
+            return {...tState }
+        },
+        CONFIRM_ORDER(state, action) {
+            return state;
         }
     }),
     sagas: {
@@ -258,6 +277,19 @@ const model = {
                 payLoad: {
                     successType: 'DEALER_LIST',
                     url: DEALER_URL,
+                    type: 'POST',
+                    params
+                }
+            });
+        },
+        * confirmOrder(action, { update, put, call }) {
+            const params = action.payLoad;
+
+            yield put({
+                type: baseType,
+                payLoad: {
+                    successType: 'CONFIRM_ORDER',
+                    url: CONFIRM_ORDER_URL,
                     type: 'POST',
                     params
                 }
