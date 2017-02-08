@@ -245,6 +245,7 @@ class Part extends Component {
             confirmList: state.cart.confirmList,
             address: state.cart.address,
             invoice: state.cart.invoice,
+            confirmSuccess: state.cart.confirmSuccess,
             dealerList: state.cart.dealerList
         }
     }
@@ -306,9 +307,9 @@ export default class Confirm extends Component {
 
     handleConfirm = () => {
         let car = [], goods = [],
-            receiving = {}.receipt = {};
+            receiving = {}, receipt = {};
 
-        const {confirmList: {cars, parts}, address} = this.props;
+        const {confirmList: {cars, parts}, address, invoice} = this.props;
 
         cars.forEach((item, index) => {
             var carsItem = {
@@ -344,6 +345,17 @@ export default class Confirm extends Component {
 
         receiving.receivingId = address.id;
 
+        if (!_.isEmpty(invoice)) {
+            receipt.type = 1;
+            if (invoice.type) {
+                receipt.header = 2;
+                receipt.company = invoice.company;
+            } else {
+                receipt.header = 1;
+                receipt.company = '';
+            }
+        }
+
         const params = {
             from: 1,
             cars: JSON.stringify(car),
@@ -352,7 +364,7 @@ export default class Confirm extends Component {
                 orderMsg: ''
             }),
             receiving: JSON.stringify(receiving),
-            receipt: '{}',
+            receipt: JSON.stringify(receipt),
             coupon: '[]'
         }
 
@@ -428,6 +440,15 @@ export default class Confirm extends Component {
             this.props.dispatch({
                 type: 'cart/confirm'
             })
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {dispatch, router, confirmSuccess} = nextProps;
+        if (confirmSuccess) {
+            router.push('/pay');
+
+            dispatch({ type: 'CLEAN_SUCCESS' });
         }
     }
 

@@ -49,6 +49,10 @@ export default class My extends Component {
         }
     }
 
+    goCart = () => {
+        this.props.router.push('/cartinfi');
+    }
+
     render() {
         const {isLogin, userPhoto, token, mobile, nickname} = this.props;
         const {applyback, unassess, undelivery, unpaid, unreceived, unselfservice} = this.props.overview;
@@ -111,7 +115,7 @@ export default class My extends Component {
                         </div>
                     </div>
                     <ul className="goWhere">
-                        <li data-value="myCoupon">
+                        <li data-value="myCoupon" onClick={this.goCart}>
                             <span className="border-b">我的代金券</span>
                             <i className="icon-arrow-right-2"></i>
                         </li>

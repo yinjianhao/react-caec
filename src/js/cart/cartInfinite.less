@@ -1,0 +1,44 @@
+.cartInfinite {
+    width: 100%;
+    height: 100%;
+    .title {
+        height: 48px;
+        line-height: 48px;
+        font-size: 24px;
+        text-align: center;
+        background-color: #fff;
+    }
+    .list-content {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    .content {
+        position: absolute;
+        bottom: 0;
+        top: 48px;
+        width: 100%;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+    .x {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 120px !important;
+        &:after {
+            content: " ";
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 100%;
+            height: 1px;
+            border-bottom: 1px solid #d9d9d9;
+            color: #d9d9d9;
+            -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+            -webkit-transform: scaleY(.5);
+            transform: scaleY(.5);
+        }
+    }
+}
