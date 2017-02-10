@@ -86,7 +86,6 @@ export default class CartInfinite extends Component {
     }
 
     requestData(start, count) {
-        debugger
         this.updateCache(start, _.range(start, start + count));
     }
 

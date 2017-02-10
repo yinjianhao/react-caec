@@ -1,227 +1,211 @@
-import React, { Component, PropTypes } from 'react';
-import iScroll from 'iscroll/build/iscroll-probe';
-import ReactIScroll from 'react-iscroll';
+import filter from 'lodash/filter'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
+import PullToRefresh from './assets/PullToRefresh'
+import { callAPI } from './request'
+import mobiscroll from "mobiscroll"
 
-import className from 'classnames';
-import _ from 'lodash';
 
-import "./listview.less";
+//离线数据分页
+class ListView extends Component {
+	static propTypes = {
+		onFilter: PropTypes.func,
+		path: PropTypes.string,
+		configPath: PropTypes.string,
+		totalPagesKey: PropTypes.string,
+		startPage: PropTypes.number,
+		paging: PropTypes.bool,
+		offline: PropTypes.bool,
+	}
 
-export default class Listview extends Component {
+	static defaultProps = {
+		data: null,
+		path: "payload", //数据路径 data path in response etc. payload for response.payload
+		configPath: "", //分页配置路径 config path in response, etc. totalPages
+		totalPagesKey: "totalPages", //总页数在config里的key total pages key in config
+		startPage: 0,
+		pageSize: 10,
+		paging: true,
+		offline: false,
+		onFilter: null, //传入该值就启用离线搜索功能,若要使用服务器搜索,请勿传入该值 
+		search: '',
+	}
 
-    static PropTypes = {
-        error: PropTypes.string
-    }
+	constructor(props) {
+		super(props);
 
-    static defaultProps = {
-        options: {
-            probeType: 2,
-            scrollX: false,
-            scrollY: true,
-            mouseWheel: true,
-            isPullToRefresh: true
-        }
-    }
+		this.state = {
+			totalPages: this.props.totalPages || 0,
+			cacheData: null,
+			data: !this.props.offline ? [] : this.props.data,
+			pageIndex: 0,
+			pageSize: this.props.pageSize,
+			isRefresh: false,
+		}
+		this.handleRefresh = this.handleRefresh.bind(this)
+		this.isShowNextPage = this.isShowNextPage.bind(this)
+	}
 
-    constructor(props) {
-        super(props);
+	handleRefresh = (downOrUp, callback) => {
+		console.log("handleRefresh")
+		var page, isRefresh;
+		if (downOrUp == "up") { //next page
+			page = this.state.page + 1;
+		} else {  // refresh
+			page = this.props.startPage;
+			isRefresh = true;
+		}
 
-        this._onScrollStart = this._onScrollStart.bind(this);
-        this._onScroll = this._onScroll.bind(this);
-        this._onScrollEnd = this._onScrollEnd.bind(this);
+		this.setState({ page: page, isRefresh }, function () {
+			// 服务端渲染: 请求数据   server side render request data from server
+			if (!this.props.offline) this.request(callback, isRefresh);
+			else { // 离线模式: 从handlePullAction取得新的(全部要显示的)数据 .
+				// here will display all data received from handlePullAction
+				const data = this.props.handlePullAction(downOrUp, this.state.data);
+				this.drawList(data, callback);
+			}
+		});
+	}
 
-        const {options = {}} = this.props
+	/**
+		 * 判断是否显示下一页按钮/拖动提示
+		 * 使用分页 & 数据总长度 > 一页长度 && !最后一页
+		 * @param  {[type]}  data [description]
+		 * @return {Boolean}      [description]
+		 */
+	isShowNextPage = (data) => {
+		return this.props.paging && data.length >= this.state.pageSize
+			&& this.state.page < (this.props.startPage == 0 ? this.state.totalPages - 1 : this.state.totalPages)
+	}
 
-        this.state = {
-            downStage: 1,
-            pullStage: 1,
-            labelTip: '下拉刷新',
-            empty: false,
-            hidden: true,
-            isLoading: false,
-            pageSize: options.pageSize || 20,
-            pageIndex: options.pageIndex || 1
-        }
-    }
+	componentWillReceiveProps(nextProps) {
+		if (this.state.refresh) {
+			console.log('==============refresh==============');
+			this.refs.ptr.refreshScroll();
+		}
+	}
 
-    render() {
+	componentDidUpdate(preProps, preState) {
+		if (this.props.onFilter != preProps.onFilter) { //更新搜索内容,则重绘 update search content
+			this.requestOrDraw();
+		}
+	}
 
-        let {downStage, pullStage} = this.state;
+	render() {
+		const items = this.state.cacheData || this.state.data;
 
-        let downTip = downStage === 1 ? '下拉刷新' : downStage === 2 ? '释放更新' : '加载中,请稍候...';
-        if (empty) {
-            pullTip = '我也是有底线的'
-        } else {
-            pullTip = pullStage === 1 ? '上拉加载更多...' : '加载中,请稍候...';
-        }
+		const isShowNextPage = this.isShowNextPage(items);
+		return (
+			<PullToRefresh
+				ref="ptr"
+				className={this.props.className}
+				handleRefresh={this.handleRefresh}
+				pullUp={isShowNextPage}
+			>
+				<div className='mbsc-lv-cont mbsc-lv-mobiscroll mbsc-lv-ic-anim mbsc-lv-handle-right'>
+					<div className='mbsc-lv-sl-c'>
+						<ul className='mbsc-comp mbsc-lv mbsc-lv-v mbsc-lv-root mbsc-lv-sl-curr'>
+							{
+								items && items.map((item, index) => {
+									return this.props.renderRow(item, index);
+								})
+							}
+						</ul>
+					</div>
+				</div>
+			</PullToRefresh>
+		);
+	}
 
-        return (
-            <ReactIScroll className="listview" iScroll={iScroll}
-                options={this.props.options}
-                onScrollStart={this._onScrollStart}
-                onScroll={this._onScroll}
-                onScrollEnd={this._onScrollEnd}>
+	componentDidMount() {
+		this.requestOrDraw()
+	}
 
-                <div className="scroller">
-                    <div className="pulldown">
-                        <span className="icon"></span>
-                        <span className="label">{downTip}</span>
-                    </div>
-                    <div className="message">
-                        <div className="empty">暂无数据</div>
-                        <div className="error">数据加载失败</div>
-                    </div>
-                    <ul className="listview-container">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                        <li>6</li>
-                        <li>7</li>
-                        <li>8</li>
-                        <li>9</li>
-                        <li>0</li>
-                    </ul>
-                    <div className="pullup">
-                        <span className="icon"></span>
-                        <span className="label">{pullTip}</span>
-                    </div>
-                </div>
+	/**
+	 * 判断是server side render,还是data render, 刷新list
+	 */
+	requestOrDraw = () => {
+		var callback;
+		if (this.refs.ptr) callback = this.refs.ptr.refreshScroll;
 
-            </ReactIScroll>
-        )
-    }
+		if (!this.props.offline) { //server side render
+			this.request(callback);
+		} else {
+			this.drawList(this.props.data, callback);
+		}
+	}
 
-    _onScrollStart(event) {
-        const {empty, isLoading} = this.state;
+	/**
+	 * Server side render 请求数据,并绘制
+	 * @param  {Function} callback [refresh scroll if success]
+	 * @return {[type]}            [description]
+	 */
+	request = (callback) => {
+		callAPI(this.getUrl(), this.props.requestOptions)
+			.then(function (response) {
+				//设置totalPages
+				var responseConfig = _.get(response, this.props.configPath, response);
+				//使用totalPagesKey 从config取出总页数
+				if (responseConfig && responseConfig[this.props.totalPagesKey] != this.state.totalPages) {
+					this.setState({ totalPages: responseConfig[this.props.totalPagesKey] });
+				}
 
-        event.startY = event.y;
-        if (!empty && isLoading) {
-            this.setSate({
-                hidden: false
-            })
-        }
-    }
+				var data = _.get(response, this.props.path, response);
+				if (!this.state.isRefresh) {//加载下一页, load next page
+					data = [...this.state.data, ...data];
+				}
 
-    _onScroll(event) {
-        const {empty, isLoading} = this.state;
-        let state = {};
+				this.drawList(data, callback);
+			}.bind(this))
+			.catch((error) => {
 
-        if (event.y > 10) {
-            event.minScrollY = 0;
-            state.downStage = 2;
-        } else if (this.y < 10 && isLoading) {
-            event.minScrollY = -50;
-            state.downStage = 1;
-        }
+			})
+	}
 
-        //上拉&如果没有结束
-        if (!empty && isLoading) {
-            state.pullStage = 1;
-        }
+	/**
+		 * draw items in the list
+		 * @param  {array}   data
+		 * @param  {Function} callback 修改成功后的回调函数
+		 */
+	drawList = (data, callback) => {
+		//load data from server(including search)
+		if (!this.props.offline) {
+			console.log("[RIONIC-LISTVIEW] draw all data")
+			this.setState({ data: data, cacheData: null, refresh: true }, function () { //if there is something to do, then do it
+				console.log('=================refresh')
+				if (callback && typeof callback === 'function') {
+					callback();
+				}
+			}.bind(this));
+		} else {  //need offline search
+			console.log("[RIONIC-LISTVIEW] draw filter data")
+			this.setState({ cacheData: this.filter(data), data: data }, function () {
+				if (callback && typeof callback === 'function') {
+					callback();
+				}
+			});
+		}
+	}
 
-        if (!_.isEmpty(state)) {
-            this.setState(state);
-        }
-    }
+	/**
+	 * 拼接url
+	 * @return {string} [url]
+	 */
+	getUrl = () => {
+		const pagination = `pageIndex=${this.state.pageIndex}&pageSize=${this.state.pageSize}`;
+		return `${this.props.requestOptions.url}?${pagination}`;
+	}
 
-    _onScrollEnd(event) {
-        const {downStage, hidden, isLoading} = this.state;
-
-        if (downStage === '2') {
-            this._onPullDown();
-        }
-
-        //设置滑动距离底部还有60px的距离时自动加载
-        if (event.startY - event.y >= 0 && Math.abs(event.maxScrollY) - Math.abs(event.y) < 60 && !hidden && !isLoading) {
-            this._onPullUp();
-        }
-    }
-
-    _onPullDown() {
-
-    }
-
-    _onPullUp() {
-
-    }
-
-    _reloadData() {
-        this.reset();
-        this.dataSource.clear();
-        this.IScroll.minScrollY = 0;
-        this.IScroll.isLoading = true;
-        this.IScroll.scrollTo(0, 0, 600, "");
-        this.$pullDown.removeClass('flip').addClass('loading').find('.label').html(
-            '加载中,请稍候...'); //第一次加载也需要菊花图
-        setTimeout(function () {
-            me.dataSource.loadData(me.page, me.pageSize, function (result, finish) {
-                if (result == null || result == "") result = [];
-                //success callback
-                me.IScroll.isLoading = false;
-                me.isisLoading = true;
-                // me.el.classList.remove('pulleddown');
-                me.$pullDown.removeClass('flip loading').find('.label').html(
-                    '下拉刷新...');
-
-                //loadmore
-                if (finish) {
-                    me.$('.loadmore').removeClass('visible');
-                    me.$pullUp.addClass('_hidden').addClass('_empty');
-                } else {
-                    me.$('.loadmore').addClass('visible');
-                    me.$pullUp.addClass('withpullup');
-                    me.$pullUp.removeClass('_empty').removeClass('_hidden').find(
-                        '.label').html('上拉加载更多...');
-                }
-
-                //显示没有更多数据
-                if (finish && result.length == 0) {
-                    me.$('.message, .message .empty').addClass('visible');
-                };
-
-                //remove all
-                me.deleteAllItems();
-                //append items
-                result.forEach(function (data) {
-                    var item = new me.itemClass({
-                        data: data
-                    });
-                    item.setEditing(me.editing);
-                    me.addItem(item);
-                });
-                //添加懒加载
-                me.addLazyLoad();
-                me.refresh();
-
-                //若数据加载非异步，则load事件会先于用户的listenTo方法执行，使用setTimeout延迟load事件触发时机
-                setTimeout(function () {
-                    me.trigger('load', me);
-                    me.setScrollerMinHeight();
-                }, 0);
-
-            }, function (error, status, isabort) {
-                // me.reset();
-                me.IScroll.isLoading = false;
-                if (isabort != true) { //手动中断请求不提示加载数据失败
-
-                    me.$pullUp.removeClass('withpullup');
-                    me.$pullUp.addClass('_hidden');
-                    me.$pullDown.removeClass('flip loading').find('.label').html(
-                        '下拉刷新...');
-                    if (!me.isisLoading) {
-                        me.$('.message, .message .error').addClass('visible');
-                    } else {
-                        Dialog.showToast('加载数据失败！')
-                    }
-                }
-                me.refresh();
-                setTimeout(function () {
-                    me.trigger('error', me);
-                    me.setScrollerMinHeight();
-                }, 0);
-            });
-        }, this.isPullToRefresh ? 400 : 0);
-    }
+	filter = (data) => {
+		if (this.props.onFilter) {
+			return filter(data, function (item) {
+				return this.props.onFilter(item);
+			}.bind(this))
+		} else {
+			return data;
+		}
+	}
 }
+
+export default ListView
