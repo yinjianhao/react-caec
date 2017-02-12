@@ -2,68 +2,60 @@ import filter from 'lodash/filter'
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import PullToRefresh from './assets/PullToRefresh'
-import { callAPI } from './request'
-import mobiscroll from "mobiscroll"
-
+import PullToRefresh from './PullToRefresh'
+import { baseFetch } from '../../../js/app/base.model'
 
 //离线数据分页
 class ListView extends Component {
 	static propTypes = {
 		onFilter: PropTypes.func,
-		path: PropTypes.string,
-		configPath: PropTypes.string,
-		totalPagesKey: PropTypes.string,
 		startPage: PropTypes.number,
-		paging: PropTypes.bool,
 		offline: PropTypes.bool,
 	}
 
 	static defaultProps = {
 		data: null,
-		path: "payload", //数据路径 data path in response etc. payload for response.payload
-		configPath: "", //分页配置路径 config path in response, etc. totalPages
-		totalPagesKey: "totalPages", //总页数在config里的key total pages key in config
-		startPage: 0,
-		pageSize: 10,
-		paging: true,
+		startPage: 1,
+		pageSize: 5,
 		offline: false,
 		onFilter: null, //传入该值就启用离线搜索功能,若要使用服务器搜索,请勿传入该值 
-		search: '',
 	}
 
 	constructor(props) {
 		super(props);
 
+		const {totalPages, offline, data, startPage, pageSize} = this.props;
+
 		this.state = {
-			totalPages: this.props.totalPages || 0,
+			totalPages: totalPages || 0,
 			cacheData: null,
-			data: !this.props.offline ? [] : this.props.data,
-			pageIndex: 0,
-			pageSize: this.props.pageSize,
+			data: !offline ? [] : data,
+			pageIndex: startPage,
+			pageSize: pageSize,
 			isRefresh: false,
 		}
-		this.handleRefresh = this.handleRefresh.bind(this)
-		this.isShowNextPage = this.isShowNextPage.bind(this)
 	}
 
 	handleRefresh = (downOrUp, callback) => {
-		console.log("handleRefresh")
-		var page, isRefresh;
-		if (downOrUp == "up") { //next page
-			page = this.state.page + 1;
+		console.log("==========handleRefresh==========");
+
+		let pageIndex, isRefresh;
+		if (downOrUp === "up") { //next page
+			pageIndex = this.state.pageIndex + 1;
+			isRefresh = false;
 		} else {  // refresh
-			page = this.props.startPage;
+			pageIndex = this.props.startPage;
 			isRefresh = true;
 		}
 
-		this.setState({ page: page, isRefresh }, function () {
-			// 服务端渲染: 请求数据   server side render request data from server
-			if (!this.props.offline) this.request(callback, isRefresh);
-			else { // 离线模式: 从handlePullAction取得新的(全部要显示的)数据 .
-				// here will display all data received from handlePullAction
-				const data = this.props.handlePullAction(downOrUp, this.state.data);
-				this.drawList(data, callback);
+		this.setState({ pageIndex, isRefresh }, () => {
+			// 服务端渲染: 请求数据  
+			if (!this.props.offline) {
+				this.request(callback);
+			} else {
+				// 离线模式: 从handlePullAction取得新的(全部要显示的)数据 .
+				// const data = this.props.handlePullAction(downOrUp, this.state.data);
+				this.drawList(this.state.data, callback);
 			}
 		});
 	}
@@ -75,27 +67,13 @@ class ListView extends Component {
 		 * @return {Boolean}      [description]
 		 */
 	isShowNextPage = (data) => {
-		return this.props.paging && data.length >= this.state.pageSize
-			&& this.state.page < (this.props.startPage == 0 ? this.state.totalPages - 1 : this.state.totalPages)
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (this.state.refresh) {
-			console.log('==============refresh==============');
-			this.refs.ptr.refreshScroll();
-		}
-	}
-
-	componentDidUpdate(preProps, preState) {
-		if (this.props.onFilter != preProps.onFilter) { //更新搜索内容,则重绘 update search content
-			this.requestOrDraw();
-		}
+		return data.length >= this.state.pageSize;
 	}
 
 	render() {
 		const items = this.state.cacheData || this.state.data;
-
 		const isShowNextPage = this.isShowNextPage(items);
+
 		return (
 			<PullToRefresh
 				ref="ptr"
@@ -103,17 +81,13 @@ class ListView extends Component {
 				handleRefresh={this.handleRefresh}
 				pullUp={isShowNextPage}
 			>
-				<div className='mbsc-lv-cont mbsc-lv-mobiscroll mbsc-lv-ic-anim mbsc-lv-handle-right'>
-					<div className='mbsc-lv-sl-c'>
-						<ul className='mbsc-comp mbsc-lv mbsc-lv-v mbsc-lv-root mbsc-lv-sl-curr'>
-							{
-								items && items.map((item, index) => {
-									return this.props.renderRow(item, index);
-								})
-							}
-						</ul>
-					</div>
-				</div>
+				<ul className='list-content'>
+					{
+						items && items.map((item, index) => {
+							return this.props.renderRow(item, index);
+						})
+					}
+				</ul>
 			</PullToRefresh>
 		);
 	}
@@ -126,8 +100,7 @@ class ListView extends Component {
 	 * 判断是server side render,还是data render, 刷新list
 	 */
 	requestOrDraw = () => {
-		var callback;
-		if (this.refs.ptr) callback = this.refs.ptr.refreshScroll;
+		let callback = this.refs.ptr.refreshScroll;
 
 		if (!this.props.offline) { //server side render
 			this.request(callback);
@@ -142,24 +115,24 @@ class ListView extends Component {
 	 * @return {[type]}            [description]
 	 */
 	request = (callback) => {
-		callAPI(this.getUrl(), this.props.requestOptions)
-			.then(function (response) {
-				//设置totalPages
-				var responseConfig = _.get(response, this.props.configPath, response);
-				//使用totalPagesKey 从config取出总页数
-				if (responseConfig && responseConfig[this.props.totalPagesKey] != this.state.totalPages) {
-					this.setState({ totalPages: responseConfig[this.props.totalPagesKey] });
+		const {pageIndex, pageSize} = this.state;
+		const {params} = this.props.options;
+		const data = Object.assign({}, params, { pageIndex, pageSize })
+
+		baseFetch({ ...this.props.options, params: data })
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
 				}
+			}).then((data) => {
+				if (data.result == '0') {
+					let tData = data.data, total = data.total;
 
-				var data = _.get(response, this.props.path, response);
-				if (!this.state.isRefresh) {//加载下一页, load next page
-					data = [...this.state.data, ...data];
+					if (!this.state.isRefresh) {//加载下一页
+						tData = [...this.state.data, ...tData];
+					}
+					this.drawList(tData, callback, total);
 				}
-
-				this.drawList(data, callback);
-			}.bind(this))
-			.catch((error) => {
-
 			})
 	}
 
@@ -169,18 +142,19 @@ class ListView extends Component {
 		 * @param  {Function} callback 修改成功后的回调函数
 		 */
 	drawList = (data, callback) => {
-		//load data from server(including search)
+		//load data from server
 		if (!this.props.offline) {
-			console.log("[RIONIC-LISTVIEW] draw all data")
-			this.setState({ data: data, cacheData: null, refresh: true }, function () { //if there is something to do, then do it
-				console.log('=================refresh')
+			console.log("[RIONIC-LISTVIEW] draw all data", data);
+			this.setState({ data: data, cacheData: null }, () => {
+				console.log('==========refresh=========');
 				if (callback && typeof callback === 'function') {
 					callback();
 				}
-			}.bind(this));
-		} else {  //need offline search
-			console.log("[RIONIC-LISTVIEW] draw filter data")
-			this.setState({ cacheData: this.filter(data), data: data }, function () {
+			});
+		} else {
+			//need offline search
+			console.log("[RIONIC-LISTVIEW] draw filter data", data);
+			this.setState({ cacheData: this.filter(data), data: data }, () => {
 				if (callback && typeof callback === 'function') {
 					callback();
 				}
@@ -188,23 +162,8 @@ class ListView extends Component {
 		}
 	}
 
-	/**
-	 * 拼接url
-	 * @return {string} [url]
-	 */
-	getUrl = () => {
-		const pagination = `pageIndex=${this.state.pageIndex}&pageSize=${this.state.pageSize}`;
-		return `${this.props.requestOptions.url}?${pagination}`;
-	}
-
 	filter = (data) => {
-		if (this.props.onFilter) {
-			return filter(data, function (item) {
-				return this.props.onFilter(item);
-			}.bind(this))
-		} else {
-			return data;
-		}
+		return this.props.onFilter ? filter(data, item => this.props.onFilter(item)) : data;
 	}
 }
 

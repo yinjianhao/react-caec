@@ -15,6 +15,7 @@ import BuyType from '../cart/BuyType';
 import Invoice from '../cart/Invoice';
 import Pay from '../cart/Pay';
 import CartInfinite from '../cart/CartInfinite';
+import PtrCart from '../cart/PtrCart';
 import Activity from '../activity/Activity';
 import My from '../my/My';
 import Info from '../my/Info';
@@ -28,6 +29,7 @@ const rootRoute = (
 		<Route path="/iscroll" component={Iscroll} />
 		<Route path="/cart" component={Cart} preset="fade" />
 		<Route path="/cartinfi" component={CartInfinite} preset="fade" />
+		<Route path="/ptrcart" component={PtrCart} preset="fade" />
 		<Route path="/confirm" component={Confirm} />
 		<Route path="/dealer(/:id)" component={Dealer} />
 		<Route path="/buyType" component={BuyType} />
