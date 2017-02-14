@@ -114,7 +114,5 @@ export default class CartList extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps, b, c) {
-        console.log(nextProps, b, c);
-    }
+    
 }

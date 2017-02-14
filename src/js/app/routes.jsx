@@ -1,11 +1,12 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route, IndexRoute, IndexRedirect } from 'react-router';
 
 import App from './App';
 import Index from '../demo/Index';
 import Swipe from '../demo/ReactSwipe';
 import Iscroll from '../demo/Iscroll';
 
+import Entrance from '../home/Entrance';
 import Home from '../home/Home';
 import Login from '../my/Login';
 import Cart from '../cart/Cart';
@@ -23,20 +24,23 @@ import Address from '../my/Address';
 
 const rootRoute = (
 	<Route path="/" component={App}>
-		<IndexRoute component={Home} preset="fade" />
+		<IndexRedirect to="/home"></IndexRedirect>
+		<Route path="/index" component={Entrance}>
+			<Route path="/home" component={Home} />
+			<Route path="/activity" component={Activity} />
+			<Route path="/cart" component={Cart} />
+			<Route path="/my" component={My} />
+		</Route>
 		<Route path="/demo" component={Index} />
 		<Route path="/reactswipe" component={Swipe} />
 		<Route path="/iscroll" component={Iscroll} />
-		<Route path="/cart" component={Cart} preset="fade" />
-		<Route path="/cartinfi" component={CartInfinite} preset="fade" />
-		<Route path="/ptrcart" component={PtrCart} preset="fade" />
+		<Route path="/cartinfi" component={CartInfinite} />
+		<Route path="/ptrcart" component={PtrCart} />
 		<Route path="/confirm" component={Confirm} />
 		<Route path="/dealer(/:id)" component={Dealer} />
 		<Route path="/buyType" component={BuyType} />
 		<Route path="/invoice" component={Invoice} />
 		<Route path="/pay" component={Pay} />
-		<Route path="/activity" component={Activity} preset="fade" />
-		<Route path="/my" component={My} preset="fade" />
 		<Route path="/info" component={Info} />
 		<Route path="/address" component={Address} />
 		<Route path="/login" component={Login} />

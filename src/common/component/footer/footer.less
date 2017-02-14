@@ -16,11 +16,20 @@
             .ui-detailicon, .ui-footer-name {
                 color: #03a9f4
             }
+            .ui-detailicon.ui-icon-on {
+                display: inline-block;
+            }
+            .ui-detailicon.ui-icon-off {
+                display: none;
+            }
         }
     }
     .ui-detailicon {
         font-size: 25px;
         font-family: "iconfont";
+        &.ui-icon-on {
+            display: none;
+        }
     }
     .ui-footer-name {
         margin-bottom: 4px;

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
 import Swipe from '../../common/component/swipe/Swipe';
-import ContainerWithFooter from '../../common/component/footer/ContainerWithFooter';
 import "./home.less"
 
 import img0 from './img/0.jpg';
@@ -73,59 +72,57 @@ export default class Home extends Component {
 
     render() {
         return (
-            <ContainerWithFooter activeIndex={0}>
-                <div id="home" className="container">
-                    <Swipe swipeOptions={{ auto: 5000, speed: 500 }} >
-                        {this.initSwipe()}
-                    </Swipe>
-                    <div className="grid">
-                        <ul id="nav">
-                            <li className="buy col-20" data-value="3">
-                                <i className="icon icon-car-buy" style={{ 'backgroundColor': '#0378ec' }}></i>
-                                <div className="h5">我要买车</div>
-                            </li>
-                            <li className="customize col-20" data-value="2">
-                                <i className="icon icon-car-diy" style={{ 'backgroundColor': '#fd491a' }}></i>
-                                <div className="h5">定制爱车</div>
-                            </li>
+            <div id="home" className="container">
+                <Swipe swipeOptions={{ auto: 5000, speed: 500 }} >
+                    {this.initSwipe()}
+                </Swipe>
+                <div className="grid">
+                    <ul id="nav">
+                        <li className="buy col-20" data-value="3">
+                            <i className="icon icon-car-buy" style={{ 'backgroundColor': '#0378ec' }}></i>
+                            <div className="h5">我要买车</div>
+                        </li>
+                        <li className="customize col-20" data-value="2">
+                            <i className="icon icon-car-diy" style={{ 'backgroundColor': '#fd491a' }}></i>
+                            <div className="h5">定制爱车</div>
+                        </li>
 
-                            <li className="boutique col-20" data-value="4">
-                                <i className="icon icon-car-parts" style={{ 'backgroundColor': '#fea203' }}></i>
-                                <div className="h5">精品配件</div>
-                            </li>
-                            <li className="serviceOl col-20" data-value="7">
-                                <i className="icon icon-insurance" style={{ 'backgroundColor': '#41c961' }}></i>
-                                <div className="h5">汽车保险</div>
-                            </li>
-                            <li className="dealer col-20" data-value="5">
-                                <i className="icon icon-dealer-locator" style={{ 'backgroundColor': '#ff3050' }}></i>
-                                <div className="h5">经销商查询</div>
-                            </li>
-                        </ul>
+                        <li className="boutique col-20" data-value="4">
+                            <i className="icon icon-car-parts" style={{ 'backgroundColor': '#fea203' }}></i>
+                            <div className="h5">精品配件</div>
+                        </li>
+                        <li className="serviceOl col-20" data-value="7">
+                            <i className="icon icon-insurance" style={{ 'backgroundColor': '#41c961' }}></i>
+                            <div className="h5">汽车保险</div>
+                        </li>
+                        <li className="dealer col-20" data-value="5">
+                            <i className="icon icon-dealer-locator" style={{ 'backgroundColor': '#ff3050' }}></i>
+                            <div className="h5">经销商查询</div>
+                        </li>
+                    </ul>
 
-                        <div id="selling">
-                            <div className="selling-title border-b">
-                                <div className="left">
-                                    <i className="icon-fire"></i>
-                                    <span className="h2">热销车</span>
-                                </div>
-                                <div className="right">
-                                    <span className="more-txt border-r h4">更多</span>
-                                    <span className="h4">APP专属</span>
-                                    <i className="icon icon-arrow-right-2"></i>
-                                </div>
+                    <div id="selling">
+                        <div className="selling-title border-b">
+                            <div className="left">
+                                <i className="icon-fire"></i>
+                                <span className="h2">热销车</span>
                             </div>
-                            <div className="featured row gutter-no">
-                                {this.initSell()}
+                            <div className="right">
+                                <span className="more-txt border-r h4">更多</span>
+                                <span className="h4">APP专属</span>
+                                <i className="icon icon-arrow-right-2"></i>
                             </div>
                         </div>
-
-                        <div id="activitesBanner" className="lazyload">
-                            <img src="http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/12/02/1478888389867.jpg" />
+                        <div className="featured row gutter-no">
+                            {this.initSell()}
                         </div>
                     </div>
+
+                    <div id="activitesBanner" className="lazyload">
+                        <img src="http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/12/02/1478888389867.jpg" />
+                    </div>
                 </div>
-            </ContainerWithFooter>
+            </div>
         );
     }
 }

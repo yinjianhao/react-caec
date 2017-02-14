@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { RouteTransition, presets } from 'react-router-transition';
+import { RouteTransition, presets } from 'react-router-transition'
 import classNames from 'classnames'
 
 class RouteTransitionWapper extends Component {
@@ -17,7 +17,7 @@ class RouteTransitionWapper extends Component {
 		const { location: { pathname, action }, presetType, routes  } = this.props;
 		const newAction = nextProps.location.action;
 		const oldRoutePrese = routes[routes.length - 1].preset;
-		const newRoutePrese = nextProps.routes[routes.length - 1].preset;
+		const newRoutePrese = nextProps.routes[nextProps.routes.length - 1].preset;
 		let newPreset = 'fade';
 		if ("PUSH" === newAction) {
 			switch (newRoutePrese) {

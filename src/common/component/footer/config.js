@@ -1,7 +1,6 @@
 export default {
-    "footers": [
-        {
-            "router": "/",
+    "footers": [{
+            "router": "/home",
             "name": "首页",
             "offIcon": "icon-home",
             "onIcon": "icon-home-fill"

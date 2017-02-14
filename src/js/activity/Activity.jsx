@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import ContainerWithFooter from '../../common/component/footer/ContainerWithFooter';
 import { Tabs, TabPane } from '../../common/component/tabs/Tabs';
 import "./activity.less"
 import Loading from '../../common/component/loading/Loading';
@@ -57,10 +56,8 @@ export default class Activity extends Component {
         const list = this.dealListData();
 
         return (
-            <ContainerWithFooter className="activity-wrap" activeIndex={1}>
-                {/*<Loading ref="loading" isLoading={this.props.isLoading}></Loading>*/}
-
-                <Tabs activeIndex={1} onChange={() => { console.log('change') } }>
+            <div className="activity-wrap" >
+                <Tabs activeIndex={1} onChange={() => { console.log('change') }}>
                     <TabPane tab="历史活动">
                         {this.initTabPane(list.panle0)}
                     </TabPane>
@@ -71,7 +68,7 @@ export default class Activity extends Component {
                         {this.initTabPane(list.panle2)}
                     </TabPane>
                 </Tabs>
-            </ContainerWithFooter>
+            </div>
         );
     }
 

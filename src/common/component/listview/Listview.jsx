@@ -8,29 +8,27 @@ import { baseFetch } from '../../../js/app/base.model'
 //离线数据分页
 class ListView extends Component {
 	static propTypes = {
-		onFilter: PropTypes.func,
+		data: PropTypes.array,
 		startPage: PropTypes.number,
-		offline: PropTypes.bool,
+		pageSize: PropTypes.number,
+		onPullUp: PropTypes.func,
+		onPullDown: PropTypes.func,
 	}
 
 	static defaultProps = {
-		data: null,
+		data: [],
 		startPage: 1,
 		pageSize: 5,
-		offline: false,
-		onFilter: null, //传入该值就启用离线搜索功能,若要使用服务器搜索,请勿传入该值 
 	}
 
 	constructor(props) {
 		super(props);
 
-		const {totalPages, offline, data, startPage, pageSize} = this.props;
+		const {data, startPage, pageIndex, pageSize} = this.props;
 
 		this.state = {
-			totalPages: totalPages || 0,
-			cacheData: null,
-			data: !offline ? [] : data,
-			pageIndex: startPage,
+			data,
+			pageIndex: pageIndex || startPage,
 			pageSize: pageSize,
 			isRefresh: false,
 		}
@@ -48,30 +46,21 @@ class ListView extends Component {
 			isRefresh = true;
 		}
 
-		this.setState({ pageIndex, isRefresh }, () => {
-			// 服务端渲染: 请求数据  
-			if (!this.props.offline) {
-				this.request(callback);
-			} else {
-				// 离线模式: 从handlePullAction取得新的(全部要显示的)数据 .
-				// const data = this.props.handlePullAction(downOrUp, this.state.data);
-				this.drawList(this.state.data, callback);
-			}
-		});
+		this.request(callback, { pageIndex, isRefresh });
 	}
 
 	/**
 		 * 判断是否显示下一页按钮/拖动提示
-		 * 使用分页 & 数据总长度 > 一页长度 && !最后一页
 		 * @param  {[type]}  data [description]
 		 * @return {Boolean}      [description]
 		 */
 	isShowNextPage = (data) => {
-		return data.length >= this.state.pageSize;
+		const {pageIndex, pageSize} = this.state;
+		return data.length - (pageIndex - this.props.startPage) * pageSize >= this.state.pageSize;
 	}
 
 	render() {
-		const items = this.state.cacheData || this.state.data;
+		const items = this.state.data;
 		const isShowNextPage = this.isShowNextPage(items);
 
 		return (
@@ -92,20 +81,26 @@ class ListView extends Component {
 		);
 	}
 
-	componentDidMount() {
-		this.requestOrDraw()
+	componentWillReceiveProps(nextProps) {
+		const { data } = nextProps;
+		this.setState({
+			data
+		})
 	}
 
-	/**
-	 * 判断是server side render,还是data render, 刷新list
-	 */
-	requestOrDraw = () => {
-		let callback = this.refs.ptr.refreshScroll;
+	componentDidUpdate(prevProps, prevState) {
+		this.refresh();
+	}
 
-		if (!this.props.offline) { //server side render
-			this.request(callback);
+	componentDidMount() {
+		let callback = this.refresh;
+		const { onPullDown } = this.props;
+		const { pageIndex, pageSize, isRefresh } = this.state;
+
+		if (onPullDown) {
+			onPullDown({ pageIndex, pageSize });
 		} else {
-			this.drawList(this.props.data, callback);
+			this.request(callback, { pageIndex, isRefresh });
 		}
 	}
 
@@ -114,10 +109,10 @@ class ListView extends Component {
 	 * @param  {Function} callback [refresh scroll if success]
 	 * @return {[type]}            [description]
 	 */
-	request = (callback) => {
-		const {pageIndex, pageSize} = this.state;
+	request = (callback, { pageIndex, isRefresh }) => {
+		const {pageSize} = this.state;
 		const {params} = this.props.options;
-		const data = Object.assign({}, params, { pageIndex, pageSize })
+		const data = Object.assign({}, params, { pageIndex, pageSize });
 
 		baseFetch({ ...this.props.options, params: data })
 			.then((response) => {
@@ -126,12 +121,13 @@ class ListView extends Component {
 				}
 			}).then((data) => {
 				if (data.result == '0') {
-					let tData = data.data, total = data.total;
+					let tData = data.data;
 
-					if (!this.state.isRefresh) {//加载下一页
+					if (!isRefresh) {//加载下一页
 						tData = [...this.state.data, ...tData];
 					}
-					this.drawList(tData, callback, total);
+
+					this.drawList(tData, callback, { pageIndex, isRefresh: false });
 				}
 			})
 	}
@@ -141,25 +137,18 @@ class ListView extends Component {
 		 * @param  {array}   data
 		 * @param  {Function} callback 修改成功后的回调函数
 		 */
-	drawList = (data, callback) => {
-		//load data from server
-		if (!this.props.offline) {
-			console.log("[RIONIC-LISTVIEW] draw all data", data);
-			this.setState({ data: data, cacheData: null }, () => {
-				console.log('==========refresh=========');
-				if (callback && typeof callback === 'function') {
-					callback();
-				}
-			});
-		} else {
-			//need offline search
-			console.log("[RIONIC-LISTVIEW] draw filter data", data);
-			this.setState({ cacheData: this.filter(data), data: data }, () => {
-				if (callback && typeof callback === 'function') {
-					callback();
-				}
-			});
-		}
+	drawList = (data, callback, option = {}) => {
+		console.log("[RIONIC-LISTVIEW] draw all data", data);
+		this.setState({ data: data, ...option }, () => {
+			console.log('==========refresh=========');
+			if (callback && typeof callback === 'function') {
+				callback();
+			}
+		});
+	}
+
+	refresh = () => {
+		this.refs.ptr.refreshScroll();
 	}
 
 	filter = (data) => {

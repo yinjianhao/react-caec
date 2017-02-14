@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import className from 'classnames';
-import ContainerWithFooter from '../../common/component/footer/ContainerWithFooter';
 import "./my.less"
 import iScroll from 'iscroll/build/iscroll-probe';
 import ReactIScroll from 'react-iscroll';
@@ -66,7 +65,6 @@ export default class My extends Component {
         const classes3 = className('menu-count', { hidden: !isLogin });
 
         return (
-            <ContainerWithFooter activeIndex={3}>
                 <div className="my">
                     <div className="myHead" onClick={this.handleClick}>
                         <img className="user-head" src={userPhoto ? userPhoto : defaultUserPhoto} />
@@ -145,12 +143,11 @@ export default class My extends Component {
                         </li>
                     </ul>
                 </div>
-            </ContainerWithFooter>
         );
     }
 
     componentDidMount() {
-        const {isLogin, dispatch} = this.props;
+        const {isLogin, dispatch, router} = this.props;
 
         if (isLogin) {
             dispatch({
