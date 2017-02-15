@@ -21,6 +21,7 @@ import Activity from '../activity/Activity';
 import My from '../my/My';
 import Info from '../my/Info';
 import Address from '../my/Address';
+import Daq from '../my/Daq';
 
 const rootRoute = (
 	<Route path="/" component={App}>
@@ -28,7 +29,7 @@ const rootRoute = (
 		<Route path="/index" component={Entrance}>
 			<Route path="/home" component={Home} />
 			<Route path="/activity" component={Activity} />
-			<Route path="/cart" component={Cart} />
+			<Route path="/cart" component={Cart} onEnter={cartEnter} />
 			<Route path="/my" component={My} />
 		</Route>
 		<Route path="/demo" component={Index} />
@@ -44,7 +45,17 @@ const rootRoute = (
 		<Route path="/info" component={Info} />
 		<Route path="/address" component={Address} />
 		<Route path="/login" component={Login} />
+		<Route path="/daq" component={Daq} />
 	</Route>
 )
+
+function cartEnter(nextState, replace) {
+	let token = localStorage.getItem('token');
+
+	if (!token) {
+		// replace(nextState.routes[nextState.routes.length - 1].path);
+		replace(`/login?redirect=${nextState.routes[nextState.routes.length - 1].path}`);
+	}
+}
 
 export default rootRoute

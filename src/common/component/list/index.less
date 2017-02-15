@@ -1,0 +1,88 @@
+.list {
+    margin: 1.875rem 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    .item-main,
+    .item-title,
+    .item-title-row {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        margin: 0;
+    }
+    .item,
+    .item-main,
+    .item-linked>a,
+    .item-title-row {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .item-content .item-main {
+        display: block;
+    }
+    .item-media+.item-main {
+        margin-left: .625rem;
+    }
+    .item {
+        color: #666666;
+        padding: .625rem .9375rem;
+        min-height: 2.75rem;
+        margin-bottom: -1px;
+        border: 1px solid #e6e6e6;
+        border-width: 1px 0;
+        &.item-header {
+            min-height: 0;
+            padding: .1875rem .9375rem;
+            border-top: 1px solid #e6e6e6;
+            background: #f7f7f7;
+            color: #888;
+            line-height: 1.6;
+        }
+        .item-media{
+            font-size: 0;
+        }
+        .item-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        a {
+            text-decoration: none;
+            color: #666666;
+            display: flex;
+            width: 100%
+        }
+        .item-after+.icon {
+            margin-left: .1875rem;
+        }
+        .item-icon {
+            color: hsla(0, 0%, 53%, .45);
+            line-height: 1.5;
+            font-size: 16px;
+        }
+        .item-subtitle {
+            font-size: 14px;
+        }
+        .item-title-row~[class*=item-] {
+            margin-top: .3125rem;
+        }
+        .item-desc {
+            font-size: .875rem;
+            color: #888;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            line-height: 1.3em;
+            max-height: 2.6em;
+        }
+    }
+}

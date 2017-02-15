@@ -34,6 +34,7 @@ const model = {
 
             data.encodePsd = encodePsd;
             localStorage.setItem('info', JSON.stringify(data));
+            localStorage.setItem('token', JSON.stringify(data.token));
             return {...state, mobile, nickname, userPhoto: img, isLogin: true }
         },
         RELOGIN(state, action) {
@@ -45,21 +46,24 @@ const model = {
             info.mod = key;
 
             localStorage.setItem('info', JSON.stringify(info));
+            localStorage.setItem('token', token);
+            debugger
 
             return state;
         },
         LOGINOUT(state, action) {
             localStorage.removeItem('info');
+            localStorage.removeItem('token');
             return {...state, isLogin: false }
         },
         SET_LOGIN(state, action) {
-            let info = localStorage.getItem('info');
-            if (!info) {
+            let token = localStorage.getItem('token');
+            if (!token) {
                 return {...state, isLogin: false }
             }
 
-            info = JSON.parse(info);
-            let { token, img, mobile, nickname } = info;
+            let info = JSON.parse(localStorage.getItem('info'));
+            let { img, mobile, nickname } = info;
 
             return {...state, token, mobile, nickname, userPhoto: img, isLogin: true }
         },

@@ -7,7 +7,7 @@ import "./cartInfinite.less";
 import './componment/checkbox.less';
 
 import CartItem from './componment/CartItem';
-import ContainerWithFooter from '../../common/component/footer/ContainerWithFooter';
+import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
 import ReactIScroll from 'react-iscroll';
 import iScroll from 'iscroll/build/iscroll-infinite';
 import Stats from 'stats.js';
@@ -89,6 +89,10 @@ export default class CartInfinite extends Component {
         this.updateCache(start, _.range(start, start + count));
     }
 
+    handleback = () => {
+        this.props.router.goBack();
+    }
+
     render() {
         let iScrollOpt = {
             mouseWheel: true,
@@ -98,37 +102,46 @@ export default class CartInfinite extends Component {
             cacheSize: 1000
         }
 
+        let style = {
+            height: '48px',
+            lineHeight: '48px',
+            width: '40px',
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            textAlign: 'center'
+        }
+
         return (
-            <ContainerWithFooter activeIndex={2}>
-                <div id="cart" className="cartInfinite">
-                    <div className="box" ref="box"></div>
-                    <div className="title">购物车</div>
-                    <div className="content">
-                        <ReactIScroll
-                            iScroll={iScroll}
-                            ref="rScroll"
-                            options={iScrollOpt}>
-                            <ul className="list-content">
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                                <li className="x"></li>
-                            </ul>
-                        </ReactIScroll>
-                    </div>
+            <div id="cart" className="cartInfinite">
+                <div className="box" ref="box"></div>
+                <div className="title">性能展示</div>
+                <div className="back" style={style} onClick={this.handleback}>返回</div>
+                <div className="content">
+                    <ReactIScroll
+                        iScroll={iScroll}
+                        ref="rScroll"
+                        options={iScrollOpt}>
+                        <ul className="list-content">
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                            <li className="x"></li>
+                        </ul>
+                    </ReactIScroll>
                 </div>
-            </ContainerWithFooter>
+            </div>
         )
     }
 

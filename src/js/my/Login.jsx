@@ -54,17 +54,16 @@ export default class Login extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.isLogin) {
-            this.props.router.goBack();
+
+            const {redirect} = this.props.location.query;
+
+            if (redirect) {
+                this.props.router.replace(redirect);
+            } else {
+                this.props.router.goBack();
+            }
         }
     }
-
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     if (nextProps.isLogin) {
-    //         this.props.router.goBack();
-    //         return false;
-    //     }
-    //     return true;
-    // }
 
     render() {
         let {phone, psd} = this.state;
@@ -77,7 +76,7 @@ export default class Login extends Component {
                     <div id="btn_reg">注册</div>
                 </div>
                 <div className="container">
-                    <Tabs onChange={() => { console.log('change') } }>
+                    <Tabs onChange={() => { console.log('change') }}>
                         <TabPane tab="账户密码登录">
                             <div className="login-psd">
                                 <div className="login_box_row border-b">

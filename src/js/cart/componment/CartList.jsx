@@ -6,6 +6,8 @@ import "../assets/index.less"
 
 import Checkbox from './Checkbox'
 import CartItem from './CartItem'
+import iScroll from 'iscroll/build/iscroll-probe'
+import ReactIScroll from 'react-iscroll'
 
 @connect(
     state => {
@@ -79,9 +81,16 @@ export default class CartList extends Component {
         return (
             <div className="container">
                 <div style={{ height: '10px' }}></div>
-                <ul className="list-content">
-                    {this.initList()}
-                </ul>
+                <div className="list-content list-content-normal">
+                    <ReactIScroll className="listview" iScroll={iScroll}>
+                        <div>
+                            <div style={{ height: '10px' }}></div>
+                            <ul>
+                                {this.initList()}
+                            </ul>
+                        </div>
+                    </ReactIScroll>
+                </div>
                 <div className="cart-footer border-t">
                     <div className="checkbox-all"><Checkbox isChecked={this.props.isAllChecked} onChange={this.handleChange}></Checkbox></div>
                     <div className="check-all h5">全选</div>
@@ -114,5 +123,5 @@ export default class CartList extends Component {
         }
     }
 
-    
+
 }

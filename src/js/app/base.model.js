@@ -8,19 +8,19 @@ const baseError = 'base/error';
 
 const RELOGIN_URL = `${basePath}/main/user/relogin`;
 
-const baseFetch = function (options) {
-    let {noToken = false, url, params, type = 'GET'} = options;
+const baseFetch = function(options) {
+    let { noToken = false, url, params, type = 'GET' } = options;
 
     let data = {};
-    let body = '', key;
+    let body = '',
+        key;
 
     for (key in params) {
         body = body + key + '=' + params[key] + '&';
     }
 
     if (!noToken) {
-        let info = JSON.parse(window.localStorage.getItem('info'));
-        let token = info && info.token;
+        let token = localStorage.getItem('token');
 
         body = body + 'token=' + token;
     } else {
@@ -52,8 +52,8 @@ const model = {
 
     }),
     sagas: {
-        *ajax(action, { update, put, call }) {
-            let {successType, successPayLoad = {}, errorType = baseError} = action.payLoad;
+        * ajax(action, { update, put, call }) {
+            let { successType, successPayLoad = {}, errorType = baseError } = action.payLoad;
 
             const response = yield baseFetch(action.payLoad);
 
@@ -73,7 +73,7 @@ const model = {
                     // })
                     // console.log('reLogin完了2');
 
-                    let {encodePsd, mobile, mod} = JSON.parse(localStorage.getItem('info'));
+                    let { encodePsd, mobile, mod } = JSON.parse(localStorage.getItem('info'));
 
                     const response = yield baseFetch({
                         noToken: true,
@@ -90,12 +90,13 @@ const model = {
                         let data = yield response.json().then(data => data);
 
                         if (data.result == 0) {
-                            let {token, password, key} = data.data;
+                            let { token, password, key } = data.data;
                             let info = JSON.parse(localStorage.getItem('info'));
                             info.encodePsd = password;
                             info.token = token;
                             info.mod = key;
                             localStorage.setItem('info', JSON.stringify(info));
+                            localStorage.setItem('token', token);
                             //重新请求
                             yield put(action);
                         }
@@ -118,12 +119,12 @@ const model = {
                 })
             }
         },
-        *error(action, { update, put, call }) {
+        * error(action, { update, put, call }) {
             console.error('-------请求失败了哦!---------');
         },
-        *reLogin(action, { update, put, call }) {
+        * reLogin(action, { update, put, call }) {
             let info = JSON.parse(localStorage.getItem('info'));
-            let {encodePsd, mobile, mod} = info;
+            let { encodePsd, mobile, mod } = info;
 
             // yield put({
             //     type: baseType,
@@ -153,13 +154,14 @@ const model = {
             console.log('baseFetch');
             if (response.ok) {
                 let data = yield response.json().then(data => data);
-                let {token, password, key} = data.data;
+                let { token, password, key } = data.data;
                 let info = JSON.parse(localStorage.getItem('info'));
                 info.encodePsd = password;
                 info.token = token;
                 info.mod = key;
 
                 localStorage.setItem('info', JSON.stringify(info));
+                localStorage.setItem('token', token);
                 console.log('beforeupdate', token);
                 yield update({ token });
                 console.log('update', token);

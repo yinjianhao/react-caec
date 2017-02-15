@@ -8,7 +8,7 @@ import './componment/checkbox.less';
 
 import Listview from '../../common/component/listview/Listview';
 import CartItem from './componment/CartItem';
-import ContainerWithFooter from '../../common/component/footer/ContainerWithFooter';
+import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
 import _ from 'lodash';
 
 @withRouter
@@ -27,20 +27,16 @@ export default class PtrCart extends Component {
 
     render() {
         return (
-            <ContainerWithFooter activeIndex={2}>
+            <ContainerWithHeader title="上下拉刷新">
                 <div id="cart" className="ptrcart">
-                    <div className="box" ref="box"></div>
-                    <div className="title">购物车</div>
-                    <div className="content">
-                        <Listview
-                            ref="list"
-                            className="listview-cart"
-                            options={this.props.options}
-                            renderRow={this.renderRow}
-                        />
-                    </div>
+                    <Listview
+                        ref="list"
+                        className="listview-cart"
+                        options={this.props.options}
+                        renderRow={this.renderRow}
+                    />
                 </div>
-            </ContainerWithFooter>
+            </ContainerWithHeader>
         )
     }
 
