@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import './loading.less';
 import loadingImg from './img/dialog-loading.gif';
@@ -12,22 +13,22 @@ export default class Loading extends Component {
     constructor(props) {
         super(props);
 
-        let {isLoading = true} = this.props;
+        let {isLoading = false} = this.props;
 
         this.state = {
             isLoading
         }
     }
 
-    hide() {
+    open = () => {
         this.setState({
-            isLoading: false
+            isLoading: true
         })
     }
 
-    show() {
+    close = () => {
         this.setState({
-            isLoading: true
+            isLoading: false
         })
     }
 
@@ -42,5 +43,27 @@ export default class Loading extends Component {
                 </div>
             </div>
         );
+    }
+
+    static newInstance = (props = { el: document.body }) => {
+        const {el, ...prop} = props;
+
+        let div = document.createElement('div');
+        el.appendChild(div);
+        let loading = ReactDOM.render(<Loading {...prop} />, div);
+
+        return {
+            component: loading,
+            open: function () {
+                loading.open();
+            },
+            close: function () {
+                loading.close();
+            },
+            destroy: function destroy() {
+                ReactDOM.unmountComponentAtNode(div);
+                el.removeChild(div);
+            }
+        };
     }
 }

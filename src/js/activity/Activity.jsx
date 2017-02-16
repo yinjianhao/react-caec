@@ -4,7 +4,6 @@ import { withRouter } from 'react-router'
 
 import { Tabs, TabPane } from '../../common/component/tabs/Tabs';
 import "./activity.less"
-import Loading from '../../common/component/loading/Loading';
 
 @connect(
     state => {

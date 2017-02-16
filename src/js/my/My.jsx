@@ -7,6 +7,7 @@ import iScroll from 'iscroll/build/iscroll-probe';
 import ReactIScroll from 'react-iscroll';
 import defaultUserPhoto from './img/user-photo.png';
 import List from '../../common/component/list/List';
+import loading from '../../common/component/loading/loading';
 
 @connect(
     state => {
@@ -128,5 +129,10 @@ export default class My extends Component {
                 type: 'my/overview',
             })
         }
+
+        loading.open();
+
+        setTimeout(() => { loading.close(); setTimeout(() => { loading.destroy() }, 3000); }, 3000);
+
     }
 }

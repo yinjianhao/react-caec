@@ -8,7 +8,7 @@ import "./confirm.less";
 
 import { ScrollContainer } from 'react-router-scroll';
 import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
-import Loading from '../../common/component/loading/Loading';
+import { Loading } from '../../common/component/loading/BaseLoading';
 import Checkbox from './componment/Checkbox';
 
 class InfoItem extends Component {
@@ -379,7 +379,7 @@ export default class Confirm extends Component {
 
         if (_.isEmpty(confirmList)) {
             return (
-                <ContainerWithHeader className="confirm" title="确认订单"><Loading></Loading></ContainerWithHeader>
+                <ContainerWithHeader className="confirm" title="确认订单"><Loading isLoading={true}></Loading></ContainerWithHeader>
             )
         }
 
