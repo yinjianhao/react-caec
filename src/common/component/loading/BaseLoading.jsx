@@ -45,6 +45,13 @@ export default class Loading extends Component {
         );
     }
 
+    componentWillReceiveProps(nextProps) {
+        let {isLoading = this.state.isLoading} = nextProps;
+        this.setState({
+            isLoading
+        })
+    }
+
     static newInstance = (props = { el: document.body }) => {
         const {el, ...prop} = props;
 

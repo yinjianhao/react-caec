@@ -42,12 +42,13 @@ export default class My extends Component {
 
     handleClick() {
         const {isLogin, router} = this.props;
-        console.log('handleClick');
-        if (isLogin) {
-            router.push('/info');
-        } else {
-            router.push('/login');
-        }
+
+        router.push(isLogin ? '/info' : '/login');
+    }
+
+    handleOrder = (event) => {
+        const index = event.currentTarget.getAttribute('data-index');
+        this.props.router.push(`/orderlist?index=${index}`);
     }
 
     render() {
@@ -72,37 +73,37 @@ export default class My extends Component {
                     <div id="unLogin" className={classes2}>登录</div>
                 </div>
                 <div className="myOrders">
-                    <div className="allOrders border-b" data-value="all">
+                    <div className="allOrders border-b" data-index='0' onClick={this.handleOrder}>
                         <h2>我的订单</h2>
                         <span className="h5">查看全部订单</span>
                         <i className="icon-arrow-right-2 icon-left"></i>
                     </div>
                     <div className="orders-items">
-                        <div id="waitPayment" className="menu-item" data-value="waitPayment">
+                        <div id="waitPayment" className="menu-item" data-index='1' onClick={this.handleOrder}>
                             <i className="icon-unpaid menuIcon">
                                 <span className={classes3}>{unpaid}</span>
                             </i>
                             <span className="menu-text h5">待付款</span>
                         </div>
-                        <div id="waitCar" className="menu-item" data-value="waitCar">
+                        <div id="waitCar" className="menu-item" data-index='2' onClick={this.handleOrder}>
                             <i className="icon-undelivered menuIcon">
                                 <span className={classes3}>{unpaid}</span>
                             </i>
                             <span className="menu-text h5">待发货</span>
                         </div>
-                        <div id="waitGoods" className="menu-item" data-value="waitGoods">
+                        <div id="waitGoods" className="menu-item" data-index='3' onClick={this.handleOrder}>
                             <i className="icon-transited menuIcon">
                                 <span className={classes3}>{unpaid}</span>
                             </i>
                             <span className="menu-text h5">待收货</span>
                         </div>
-                        <div id="waitEvaluate" className="menu-item" data-value="waitEvaluate">
+                        <div id="waitEvaluate" className="menu-item" data-index='4' onClick={this.handleOrder}>
                             <i className="icon-uncomment menuIcon">
                                 <span className={classes3}>{unpaid}</span>
                             </i>
                             <span className="menu-text h5">待评价</span>
                         </div>
-                        <div id="afterSale" className="menu-item" data-value="afterSale">
+                        <div id="afterSale" className="menu-item" data-index='5' onClick={this.handleOrder}>
                             <i className="icon-refund menuIcon">
                                 <span className={classes3}>{unpaid}</span>
                             </i>
@@ -130,9 +131,8 @@ export default class My extends Component {
             })
         }
 
-        loading.open();
+        // loading.open();
 
-        setTimeout(() => { loading.close(); setTimeout(() => { loading.destroy() }, 3000); }, 3000);
-
+        // setTimeout(() => { loading.close(); setTimeout(() => { loading.destroy() }, 3000); }, 3000);
     }
 }

@@ -22,8 +22,17 @@ import ReactIScroll from 'react-iscroll'
 )
 @withRouter
 export default class CartList extends Component {
-    static PropTypes = {
 
+    static defaultProps = {
+        options: {
+            probeType: 2,
+            tap: true,
+            click: false,
+            fadeScrollbars: true,
+            interactiveScrollbars: false,
+            keyBindings: false,
+            preventDefault: false,
+        }
     }
 
     constructor(props) {
@@ -82,7 +91,7 @@ export default class CartList extends Component {
             <div className="container">
                 <div style={{ height: '10px' }}></div>
                 <div className="list-content list-content-normal">
-                    <ReactIScroll className="listview" iScroll={iScroll}>
+                    <ReactIScroll iScroll={iScroll} options={this.props.options}>
                         <div>
                             <div style={{ height: '10px' }}></div>
                             <ul>
@@ -110,7 +119,7 @@ export default class CartList extends Component {
                             </span>
                     }
                 </div>
-            </div>
+            </div >
         )
     }
 

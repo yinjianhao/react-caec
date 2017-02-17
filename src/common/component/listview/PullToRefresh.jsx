@@ -7,10 +7,10 @@ class PullToRefresh extends Component {
 	static defaultProps = {
 		pullUp: false,
 		options: {
-			probeType: 1,
+			probeType: 2,
 			tap: true,
 			click: false,
-			preventDefaultException: { tagName: /.*/ },
+			preventDefault: false,
 			fadeScrollbars: true,
 			interactiveScrollbars: false,
 			keyBindings: false,

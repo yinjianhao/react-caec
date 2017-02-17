@@ -26,10 +26,10 @@ const Tabs = class Tabs extends Component {
 
         this._handleTabChange = this._handleTabChange.bind(this);
 
-        let {activeIndex} = this.props;
+        let {activeIndex, options} = this.props;
 
         this.state = {
-            activeIndex: activeIndex,
+            activeIndex: options && options.initialSlide || activeIndex,
             preIndex: activeIndex
         }
     }
@@ -59,7 +59,8 @@ const Tabs = class Tabs extends Component {
                 onTabClick={this._handleTabChange}
                 panels={this.props.children}
                 activeIndex={this.state.activeIndex}
-                />
+                options={this.props.options}
+            />
         )
     }
 
@@ -69,7 +70,7 @@ const Tabs = class Tabs extends Component {
                 onTabChange={this._handleTabChange}
                 panels={this.props.children}
                 activeIndex={this.state.activeIndex}
-                />
+            />
         )
     }
 
@@ -106,6 +107,8 @@ const TabPane = class TabPane extends Component {
         )
     }
 }
+
+export default Tabs
 
 export {
     TabPane,

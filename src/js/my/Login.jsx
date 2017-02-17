@@ -67,7 +67,7 @@ export default class Login extends Component {
 
     render() {
         let {phone, psd} = this.state;
-
+        
         return (
             <div id="login">
                 <div className="header">
@@ -76,7 +76,7 @@ export default class Login extends Component {
                     <div id="btn_reg">注册</div>
                 </div>
                 <div className="container">
-                    <Tabs onChange={() => { console.log('change') }}>
+                    <Tabs>
                         <TabPane tab="账户密码登录">
                             <div className="login-psd">
                                 <div className="login_box_row border-b">

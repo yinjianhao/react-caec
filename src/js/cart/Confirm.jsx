@@ -8,7 +8,7 @@ import "./confirm.less";
 
 import { ScrollContainer } from 'react-router-scroll';
 import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
-import { Loading } from '../../common/component/loading/BaseLoading';
+import Loading from '../../common/component/loading/BaseLoading';
 import Checkbox from './componment/Checkbox';
 
 class InfoItem extends Component {
@@ -446,7 +446,7 @@ export default class Confirm extends Component {
     componentWillReceiveProps(nextProps) {
         const {dispatch, router, confirmSuccess} = nextProps;
         if (confirmSuccess) {
-            router.push('/pay');
+            router.replace('/pay');
 
             dispatch({ type: 'CLEAN_SUCCESS' });
         }

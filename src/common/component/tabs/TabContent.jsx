@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import Swipe from 'react-swipe';
 import './tabs.less';
 
@@ -42,9 +42,6 @@ export default class TabContent extends Component {
                 onTabChange(index)
             }
         };
-
-        // console.log(panels);
-        // console.log(this._initPanels());
 
         return (
             <div className="ui-tabcontent">

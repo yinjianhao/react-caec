@@ -22,6 +22,7 @@ import My from '../my/My';
 import Info from '../my/Info';
 import Address from '../my/Address';
 import Daq from '../my/Daq';
+import OrderList from '../order/OrderList';
 
 const rootRoute = (
 	<Route path="/" component={App}>
@@ -29,7 +30,7 @@ const rootRoute = (
 		<Route path="/index" component={Entrance}>
 			<Route path="/home" component={Home} />
 			<Route path="/activity" component={Activity} />
-			<Route path="/cart" component={Cart} onEnter={cartEnter} />
+			<Route path="/cart" component={Cart} onEnter={loginTest} />
 			<Route path="/my" component={My} />
 		</Route>
 		<Route path="/demo" component={Index} />
@@ -46,10 +47,11 @@ const rootRoute = (
 		<Route path="/address" component={Address} />
 		<Route path="/login" component={Login} />
 		<Route path="/daq" component={Daq} />
+		<Route path="/orderlist" component={OrderList} onEnter={loginTest} />
 	</Route>
 )
 
-function cartEnter(nextState, replace) {
+function loginTest(nextState, replace) {
 	let token = localStorage.getItem('token');
 
 	if (!token) {
