@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import 'whatwg-fetch';
 
 //styles
 import '../../../lib/styles/mobiscroll.custom-3.0.0-beta6.min.css';

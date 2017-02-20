@@ -29,7 +29,8 @@
     "restack-core": "^0.3.11",
     "stats.js": "^0.17.0",
     "swipe-js-iso": "^2.0.3",
-    "swiper": "^3.4.1"
+    "swiper": "^3.4.1",
+    "whatwg-fetch": "^2.0.2"
   },
   "devDependencies": {
     "babel": "^6.5.2",
