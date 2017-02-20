@@ -6,6 +6,7 @@ import _ from 'lodash'
 const CART_LIST_URL = `${basePath}/shoppingcart/cart/info`;
 const CART_LIST_DEL_URL = `${basePath}/shoppingcart/cart/clean`;
 const UPDATE_CART_NUM_URL = `${basePath}/shoppingcart/cart/modify`;
+const ADD_CART_URL = `${basePath}/shoppingcart/cart/shopping`;
 const CONFIRM_URL = `${basePath}/main/order/unconfirm`;
 const CONFIRM_ORDER_URL = `${basePath}/main/order/confirm`;
 const DEALER_URL = `${basePath}/main/dealer/list`;
@@ -105,14 +106,14 @@ const model = {
             const totalNum = action.payLoad.response.total;
             const cartList = action.payLoad.response.data;
 
-            return { ...state, totalNum, cartList }
+            return {...state, totalNum, cartList }
         },
         UPDATE_CART_LIST(state, action) {
             const { index } = action.payLoad;
             const cartList = _.cloneDeep(state.cartList);
             _.pullAt(cartList, index);
 
-            return { ...state, cartList }
+            return {...state, cartList }
         },
         IS_ALL_CHECKED(state, action) {
             const { isAllChecked } = action.payLoad;
@@ -129,7 +130,7 @@ const model = {
 
             checkedNum = isAllChecked ? cartList.length : 0;
 
-            return { ...state, isAllChecked, cartList, checkedNum, totalPrice }
+            return {...state, isAllChecked, cartList, checkedNum, totalPrice }
         },
         CONFIRM_LIST(state, action) {
             const confirmList = action.payLoad.response.data;
@@ -140,15 +141,15 @@ const model = {
 
             address = address.length ? address[0] : {}
 
-            return { ...state, confirmList, address }
+            return {...state, confirmList, address }
         },
         CLEAN_CONFIRM(state, action) {
-            return { ...state, confirmList: {} }
+            return {...state, confirmList: {} }
         },
         DEALER_LIST(state, action) {
             const dealerList = action.payLoad.response.data;
 
-            return { ...state, dealerList }
+            return {...state, dealerList }
         },
         SET_DEALER(state, action) {
             const { dealerCheckIndex, carIndex } = action.payLoad;
@@ -156,7 +157,7 @@ const model = {
 
             tState.confirmList.cars[carIndex].dealer = tState.dealerList[dealerCheckIndex];
 
-            return { ...tState }
+            return {...tState }
         },
         SET_BUYTYPE(state, action) {
             const { info, carIndex } = action.payLoad;
@@ -164,7 +165,7 @@ const model = {
 
             tState.confirmList.cars[carIndex].buyType = info;
 
-            return { ...tState }
+            return {...tState }
         },
         SET_CHECKED_ADDRESS(state, action) {
             const { index } = action.payLoad;
@@ -172,7 +173,7 @@ const model = {
 
             tState.address = tState.confirmList.receiving[index];
 
-            return { ...tState }
+            return {...tState }
         },
         SET_INVOICE(state, action) {
             const { type, company } = action.payLoad;
@@ -180,13 +181,13 @@ const model = {
 
             tState.invoice = action.payLoad;
 
-            return { ...tState }
+            return {...tState }
         },
         CONFIRM_ORDER(state, action) {
-            return { ...state, confirmSuccess: true };
+            return {...state, confirmSuccess: true };
         },
         CLEAN_SUCCESS(state, action) {
-            return { ...state, confirmSuccess: false };
+            return {...state, confirmSuccess: false };
         }
     }),
     sagas: {
@@ -226,6 +227,46 @@ const model = {
                     }
                 }
             });
+        },
+        * add(action, { update, put, call }) {
+            const { goods } = action.payLoad;
+
+            yield put({
+                type: baseType,
+                payLoad: {
+                    successType: 'cart/updateCart',
+                    successPayLoad: action.payLoad,
+                    url: ADD_CART_URL,
+                    type: 'POST',
+                    params: {
+                        goods: JSON.stringify(goods)
+                    }
+                }
+            })
+        },
+        * updateCart(action, { update, put, call }) {
+            const { goods, cb } = action.payLoad;
+
+            // const cartList = _.cloneDeep(yield select(state => state.cart.cartList));
+            // const tCartList = [];
+
+            // for (let good of goods) {
+            //     const tGood = cartList.filter(item => item.id == good.id);
+
+            //     if (tGood.length > 0) {
+            //         tGood[0].count += good.count;
+            //     } else {
+            //         tCartList.unshift(good);
+            //     }
+            // }
+
+            // yield update({ cartList: tCartList.concat(cartList) });
+
+            cb();
+
+            yield put({
+                type: 'cart/list'
+            })
         },
         * del(action, { update, put, call }) {
             const state = yield select();

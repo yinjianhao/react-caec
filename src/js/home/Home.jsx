@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import Swipe from '../../common/component/swipe/Swipe';
+import iScroll from 'iscroll/build/iscroll-probe'
+import ReactIScroll from 'react-iscroll'
+import Swipe from '../../common/component/swipe/Swipe'
 import "./home.less"
 
 import img0 from './img/0.jpg';
@@ -28,7 +30,16 @@ export default class Home extends Component {
             { id: 1, img: 'http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/08/31/21/1472650795953.jpg' },
             { id: 2, img: 'http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/15/11/1479178933543.jpg' },
             { id: 3, img: 'http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/15/11/1479178948032.jpg' },
-        ]
+        ],
+        options: {
+            probeType: 2,
+            tap: true,
+            click: false,
+            fadeScrollbars: true,
+            interactiveScrollbars: false,
+            keyBindings: false,
+            preventDefault: false,
+        }
     }
 
     initSwipe() {
@@ -73,6 +84,7 @@ export default class Home extends Component {
     render() {
         return (
             <div id="home" className="container">
+
                 <Swipe swipeOptions={{ auto: 5000, speed: 500 }} >
                     {this.initSwipe()}
                 </Swipe>
@@ -122,6 +134,7 @@ export default class Home extends Component {
                         <img src="http://mall.changan.com.cn/goods-img/img/otherimg/pic/2016/11/12/02/1478888389867.jpg" />
                     </div>
                 </div>
+
             </div>
         );
     }

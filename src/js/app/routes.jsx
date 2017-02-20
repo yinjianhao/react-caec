@@ -33,6 +33,7 @@ const rootRoute = (
 			<Route path="/cart" component={Cart} onEnter={loginTest} />
 			<Route path="/my" component={My} />
 		</Route>
+		<Route path="/cart2" component={Cart} />
 		<Route path="/demo" component={Index} />
 		<Route path="/reactswipe" component={Swipe} />
 		<Route path="/iscroll" component={Iscroll} />

@@ -9,6 +9,7 @@ import ContainerWithHeader from '../../common/component/header/ContainerWithHead
 import loading from '../../common/component/loading/loading'
 import { Tabs, TabPane } from '../../common/component/tabs/Tabs'
 
+@connect()
 @withRouter
 class OrderItem extends Component {
 
@@ -85,7 +86,7 @@ class OrderItem extends Component {
             )
         } else if (status == '11' || status == '23' || status == '26') {
             return (
-                <div className="btn">再次购买</div>
+                <div className="btn" onClick={this.handleBuy}>再次购买</div>
             )
         }
 
@@ -104,6 +105,19 @@ class OrderItem extends Component {
         if (typeof onCancel === 'function') {
             onCancel();
         }
+    }
+
+    handleBuy = () => {
+        const {data: {subOrders}} = this.props;
+        const {goods} = subOrders[0];
+
+        this.props.dispatch({
+            type: 'cart/add',
+            payLoad: {
+                goods: goods.map(item => { return { "id": item.id, "count": item.count } }),
+                cb: () => { this.props.router.push('/cart2') }
+            }
+        })
     }
 
     render() {
@@ -198,8 +212,9 @@ export default class OrderList extends Component {
             )
         }
 
+        console.log('------------------------initOrderList-------------------------------')
         return orders.map((order, index) => {
-            return <OrderItem key={order.subOrders[0].id} data={order} onCancel={this.handleCancel} />
+            return <OrderItem key={index.toString()} data={order} onCancel={this.handleCancel} />
         })
     }
 

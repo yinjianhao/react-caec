@@ -2,3 +2,5 @@ node_modules/
 .vscode/
 .happypack/
 .temp/
+dist/
+dist.zip
