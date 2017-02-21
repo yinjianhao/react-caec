@@ -11,7 +11,10 @@ const orderState = [
     ['26'],
     ['09', '11', '26']
 ];
+
 const ORDER_LIST_URL = `${basePath}/member/order/list`;
+const DETAIL_NOTPAY_URL = `${basePath}/member/order/notpay`;
+const DETAIL_URL = `${basePath}/member/order/detail`;
 
 function processOrderListData(orders) {
     //遍历主订单
@@ -31,7 +34,7 @@ function processOrderListData(orders) {
         if (subOrders.length > 1) {
             let currentI = i;
 
-            for (subOrder of subOrders) {
+            for (let subOrder of subOrders) {
                 let newOrder = Object.assign(order);
                 newOrder.subOrders = [subOrder];
 
@@ -60,7 +63,8 @@ const model = {
             3: [],
             4: [],
             5: [],
-        }
+        },
+        detail: {}
     },
     reducers: createReducer([], {
         ORDER_LIST(state, action) {
@@ -70,6 +74,11 @@ const model = {
             let orderList = processOrderListData(data);
 
             return { ...state, orderList: { ...state.orderList, [index]: orderList }, isLoading: false }
+        },
+        ORDER_DETAIL(state, action) {
+            let { data } = action.payLoad.response;
+
+            return { ...state, detail: data, isLoading: false }
         }
     }),
     sagas: {
@@ -89,6 +98,21 @@ const model = {
                         pageIndex: 1,
                         pageSize: 30,
                         status: JSON.stringify(orderState[index])
+                    }
+                }
+            });
+        },
+        * detail(action, { update, put, call }) {
+            yield update({ isLoading: true });
+
+            yield put({
+                type: baseType,
+                payLoad: {
+                    successType: 'ORDER_DETAIL',
+                    url: DETAIL_URL,
+                    type: 'GET',
+                    params: {
+                        id: action.payLoad.id
                     }
                 }
             });

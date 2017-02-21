@@ -13,9 +13,11 @@ export default class Cart extends Component {
     }
 
     render() {
+        const {back = false } = this.props.location.query;
+
         return (
             <div id="cart">
-                <EditHeader title="购物车"></EditHeader>
+                <EditHeader back={back} title="购物车"></EditHeader>
                 <CartList></CartList>
             </div>
         )

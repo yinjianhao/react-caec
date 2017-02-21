@@ -87,25 +87,25 @@ export default class My extends Component {
                         </div>
                         <div id="waitCar" className="menu-item" data-index='2' onClick={this.handleOrder}>
                             <i className="icon-undelivered menuIcon">
-                                <span className={classes3}>{unpaid}</span>
+                                <span className={classes3}>{undelivery}</span>
                             </i>
                             <span className="menu-text h5">待发货</span>
                         </div>
                         <div id="waitGoods" className="menu-item" data-index='3' onClick={this.handleOrder}>
                             <i className="icon-transited menuIcon">
-                                <span className={classes3}>{unpaid}</span>
+                                <span className={classes3}>{unreceived}</span>
                             </i>
                             <span className="menu-text h5">待收货</span>
                         </div>
                         <div id="waitEvaluate" className="menu-item" data-index='4' onClick={this.handleOrder}>
                             <i className="icon-uncomment menuIcon">
-                                <span className={classes3}>{unpaid}</span>
+                                <span className={classes3}>{unassess}</span>
                             </i>
                             <span className="menu-text h5">待评价</span>
                         </div>
                         <div id="afterSale" className="menu-item" data-index='5' onClick={this.handleOrder}>
                             <i className="icon-refund menuIcon">
-                                <span className={classes3}>{unpaid}</span>
+                                <span className={classes3}>{applyback}</span>
                             </i>
                             <span className="menu-text h5">退款/售后</span>
                         </div>

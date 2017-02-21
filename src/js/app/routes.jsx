@@ -23,6 +23,7 @@ import Info from '../my/Info';
 import Address from '../my/Address';
 import Daq from '../my/Daq';
 import OrderList from '../order/OrderList';
+import OrderDetail from '../order/OrderDetail';
 
 const rootRoute = (
 	<Route path="/" component={App}>
@@ -49,6 +50,7 @@ const rootRoute = (
 		<Route path="/login" component={Login} />
 		<Route path="/daq" component={Daq} />
 		<Route path="/orderlist" component={OrderList} onEnter={loginTest} />
+		<Route path="/orderdetail" component={OrderDetail} />
 	</Route>
 )
 

@@ -67,9 +67,9 @@ class OrderItem extends Component {
                 </div>
             )
         }
-        return goods.map(item => {
+        return goods.map((item, index) => {
             return (
-                <div className="detail-item border">
+                <div key={index} className="detail-item border">
                     <img src={item.img} />
                 </div>
             )
@@ -95,19 +95,21 @@ class OrderItem extends Component {
         )
     }
 
-    handlePay = () => {
+    handlePay = (event) => {
         this.props.router.push('/pay');
+        event.stopPropagation();
     }
 
-    handleCancel = () => {
+    handleCancel = (event) => {
         const {onCancel} = this.props;
 
         if (typeof onCancel === 'function') {
             onCancel();
         }
+        event.stopPropagation();
     }
 
-    handleBuy = () => {
+    handleBuy = (event) => {
         const {data: {subOrders}} = this.props;
         const {goods} = subOrders[0];
 
@@ -115,9 +117,29 @@ class OrderItem extends Component {
             type: 'cart/add',
             payLoad: {
                 goods: goods.map(item => { return { "id": item.id, "count": item.count } }),
-                cb: () => { this.props.router.push('/cart2') }
+                cb: () => { this.props.router.push('/cart2?back=true') }
             }
         })
+        event.stopPropagation();
+    }
+
+    handleItemClick = () => {
+        const {data: {subOrders}} = this.props;
+        const subOrder = subOrders[0];
+        const {status, id} = subOrder;
+
+        //01,23 unpay
+        //09,11 cancel
+        //qita  detail
+   
+        if (status == '01' || status == '23') { alert('待开发,敬请期待') }
+        else if (status == '09' || status == '11') { alert('待开发,敬请期待') }
+        else {
+            this.props.router.push({
+                pathname: '/orderdetail',
+                state: { id }
+            });
+        }
     }
 
     render() {
@@ -126,7 +148,7 @@ class OrderItem extends Component {
         const {status, cost, goods} = subOrder;
 
         return (
-            <li className="order-item">
+            <li className="order-item" onClick={this.handleItemClick}>
                 <div className="item-top border-b">
                     <span className="h4">{data.time}</span>
                     <span className={`${this.status2Color(status)} h3`}>{this.status2Type(status)}</span>
@@ -208,13 +230,13 @@ export default class OrderList extends Component {
                 <div className="empty">
                     <i className="icon-order iconfont"></i>
                     您还没有相关订单
-            </div>
+                </div>
             )
         }
 
         console.log('------------------------initOrderList-------------------------------')
         return orders.map((order, index) => {
-            return <OrderItem key={index.toString()} data={order} onCancel={this.handleCancel} />
+            return <OrderItem key={index} data={order} onCancel={this.handleCancel} />
         })
     }
 

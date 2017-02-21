@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import { Tabs, TabPane } from '../../common/component/tabs/Tabs';
+import { Tabs, TabPane } from '../../common/component/tabs/Tabs'
 import "./login.less"
 
 @connect(
