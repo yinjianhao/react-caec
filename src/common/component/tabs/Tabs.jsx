@@ -13,20 +13,24 @@ const Tabs = class Tabs extends Component {
     static propTypes = {
         className: PropTypes.string,
         activeIndex: PropTypes.number,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        tabPosition: PropTypes.oneOf(['top', 'bottom']),
+        type: PropTypes.oneOf(['line', 'swipe']),
+        options: PropTypes.object,
     }
 
     static defaultProps = {
         activeIndex: 0,
-        onChange: () => { }
+        onChange: () => { },
+        tabPosition: 'top',
+        type: 'line',
+        options: {}
     }
 
     constructor(props) {
         super(props);
 
-        this._handleTabChange = this._handleTabChange.bind(this);
-
-        let {activeIndex, options} = this.props;
+        let {activeIndex, options} = props;
 
         this.state = {
             activeIndex: options && options.initialSlide || activeIndex,
@@ -34,15 +38,7 @@ const Tabs = class Tabs extends Component {
         }
     }
 
-    // componentWillReceiveProps(nextProps) {
-
-    // }
-
-    // shouldComponentUpdate(nextProps, nextState) {
-
-    // }
-
-    _handleTabChange(index) {
+    _handleTabChange = (index) => {
         let currentIndex = this.state.activeIndex;
         if (currentIndex !== index) {
             this.setState({
@@ -53,18 +49,20 @@ const Tabs = class Tabs extends Component {
         }
     }
 
-    _renderTabNav() {
+    _renderTabNav = () => {
+        const {children, type, options} = this.props;
         return (
             <TabNav
                 onTabClick={this._handleTabChange}
-                panels={this.props.children}
+                panels={children}
                 activeIndex={this.state.activeIndex}
-                options={this.props.options}
+                type={type}
+                options={options}
             />
         )
     }
 
-    _renderTabContent() {
+    _renderTabContent = () => {
         return (
             <TabContent
                 onTabChange={this._handleTabChange}
@@ -75,8 +73,8 @@ const Tabs = class Tabs extends Component {
     }
 
     render() {
-        const {className} = this.props;
-        const classes = classNames(className, 'ui-tabs');
+        const {className, tabPosition} = this.props;
+        const classes = classNames('ui-tabs', className, tabPosition);
 
         return (
             <div className={classes}>
@@ -97,16 +95,14 @@ const TabPane = class TabPane extends Component {
         ])
     }
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div>{this.props.children}</div>
         )
     }
 }
+
+Tabs.TabPane = TabPane;
 
 export default Tabs
 

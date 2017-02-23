@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import Swipe from 'react-swipe';
+// import Swipe from 'react-swipe';
+import Swiper from '../swiper/swiper';
 import './tabs.less';
 
 export default class TabContent extends Component {
@@ -13,12 +14,16 @@ export default class TabContent extends Component {
         ])
     };
 
-    constructor(props) {
-        super(props);
+    static defaultProps = {
+        activeIndex: 0,
+        onTabChange: () => { },
     }
 
     componentWillReceiveProps(nextProps) {
-        this.refs.swipe.slide(nextProps.activeIndex);
+        if ('activeIndex' in nextProps) {
+            // this.refs.swipe.slide(nextProps.activeIndex);
+            this.refs.swiper.slideTo(nextProps.activeIndex);
+        }
     }
 
     _initPanels() {
@@ -35,19 +40,23 @@ export default class TabContent extends Component {
 
     render() {
         const {activeIndex, onTabChange} = this.props;
-        const swipeOptions = {
-            startSlide: activeIndex,
-            continuous: false,
-            callback: function (index, elem) {
-                onTabChange(index)
+        const options = {
+            // startSlide: activeIndex,
+            // continuous: false,
+            // callback: function (index, elem) {
+            //     onTabChange(index)
+            // },
+            initialSlide: activeIndex,
+            onSlideChangeEnd: function (swiper) {
+                onTabChange(swiper.activeIndex);
             }
         };
 
         return (
             <div className="ui-tabcontent">
-                <Swipe ref="swipe" swipeOptions={swipeOptions}>
+                <Swiper ref="swiper" options={options}>
                     {this._initPanels()}
-                </Swipe>
+                </Swiper>
             </div>
         );
     }

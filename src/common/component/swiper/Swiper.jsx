@@ -9,6 +9,8 @@ export default class ReactSwiper extends Component {
             margin: '0 auto',
             position: 'relative',
             overflow: 'hidden',
+            width: '100%',
+            height: '100%',
         },
         options: {}
     }
@@ -34,11 +36,11 @@ export default class ReactSwiper extends Component {
     }
 
     render() {
-        const {children, className} = this.props;
+        const {children, className = ''} = this.props;
 
         return (
             <div ref="swiperContainer" className={`swiper-container ${className}`} style={this.props.containerStyle}>
-                <div className="swiper-wrapper">
+                <div className="swiper-wrapper" style={{ 'boxSizing': 'border-box' }}>
                     {
                         React.Children.map(children, (child, index) => {
                             return React.cloneElement(child, {

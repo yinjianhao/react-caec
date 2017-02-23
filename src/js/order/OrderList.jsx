@@ -131,7 +131,7 @@ class OrderItem extends Component {
         //01,23 unpay
         //09,11 cancel
         //qita  detail
-   
+
         if (status == '01' || status == '23') { alert('待开发,敬请期待') }
         else if (status == '09' || status == '11') { alert('待开发,敬请期待') }
         else {
@@ -181,9 +181,7 @@ class OrderItem extends Component {
 export default class OrderList extends Component {
 
     options = {
-        pagination: null,
         slidesPerView: 4,
-        paginationClickable: false,
         spaceBetween: 0,
         initialSlide: 0,
     }
@@ -259,7 +257,7 @@ export default class OrderList extends Component {
 
         return (
             <ContainerWithHeader className="order-list" title="我的订单" isLoading={this.props.isLoading}>
-                <Tabs options={this.options} onChange={this.handleChange}>
+                <Tabs type="swipe" options={this.options} onChange={this.handleChange}>
                     <TabPane tab="全部">
                         {this.initOrderList(0)}
                     </TabPane>

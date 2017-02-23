@@ -2,6 +2,22 @@
     position: relative;
     width: 100%;
     height: 100%;
+    &.top {
+        .ui-tabcontent {
+            padding-top: 40px;
+        }
+        .ui-tabnav {
+            top: 0;
+        }
+    }
+    &.bottom {
+        .ui-tabcontent {
+            padding-bottom: 40px;
+        }
+        .ui-tabnav {
+            bottom: 0;
+        }
+    }
 }
 
 .ui-tabcontent {
@@ -10,7 +26,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    padding-top: 40px;
     .react-swipe-container {
         width: 100%;
         height: 100%;
@@ -21,15 +36,15 @@
 }
 
 .ui-tabcontent-wrap {
+    width: 100%;
     height: 100%;
     overflow-y: auto;
 }
 
 .ui-tabnav {
-    position: relative;
+    position: absolute;
     width: 100%;
     height: 40px;
-    border-bottom: 1px solid #d9d9d9;
     background: #fff;
     z-index: 99;
     .ui-tabnav-list {

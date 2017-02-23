@@ -67,7 +67,7 @@ export default class Login extends Component {
 
     render() {
         let {phone, psd} = this.state;
-        
+
         return (
             <div id="login">
                 <div className="header">

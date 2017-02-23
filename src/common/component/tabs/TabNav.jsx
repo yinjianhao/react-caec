@@ -6,25 +6,18 @@ import './tabs.less';
 export default class TabNav extends Component {
 
     static propTypes = {
-        options: PropTypes.object,
+        className: PropTypes.string,
         activeIndex: PropTypes.number,
-        onTabClick: PropTypes.func,
+        type: PropTypes.oneOf(['line', 'swipe']),
+        options: PropTypes.object,
         panels: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.node),
             PropTypes.node
         ])
     }
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isSwiper: !!this.props.options
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
-        if (this.state.isSwiper && nextProps.activeIndex !== this.props.activeIndex) {
+        if (this.props.type === 'swipe' && nextProps.activeIndex !== this.props.activeIndex) {
             this.refs.swiper.slideTo(nextProps.activeIndex);
         }
     }
@@ -32,7 +25,7 @@ export default class TabNav extends Component {
     _renderTabNavItem() {
         const {panels, activeIndex, onTabClick, options} = this.props;
 
-        if (this.state.isSwiper) {
+        if (this.props.type === 'swipe') {
             return (
                 <Swiper ref="swiper" className="ui-tabnav-list" options={options}>
                     {
