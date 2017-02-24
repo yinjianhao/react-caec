@@ -52,12 +52,12 @@ export default class Loading extends Component {
         })
     }
 
-    static newInstance = (props = { el: document.body }) => {
-        const {el, ...prop} = props;
+    static newInstance = (properties = { el: document.body }) => {
+        const {el, ...props} = properties;
 
         let div = document.createElement('div');
         el.appendChild(div);
-        let loading = ReactDOM.render(<Loading {...prop} />, div);
+        let loading = ReactDOM.render(<Loading {...props} />, div);
 
         return {
             component: loading,

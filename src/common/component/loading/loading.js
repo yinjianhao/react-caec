@@ -2,19 +2,19 @@ import Loading from './BaseLoading'
 
 let loadingInstance = null;
 
-function getLoadingInstance() {
+function getLoadingInstance(props) {
     if (loadingInstance) {
         return loadingInstance;
     }
 
-    loadingInstance = Loading.newInstance();
+    loadingInstance = Loading.newInstance(props);
     return loadingInstance;
 }
 
 const loading = {
 
-    open: function() {
-        getLoadingInstance().open();
+    open: function(props) {
+        getLoadingInstance(props).open();
     },
     close: function() {
         loadingInstance && loadingInstance.close();
