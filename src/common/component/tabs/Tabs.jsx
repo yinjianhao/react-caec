@@ -15,7 +15,7 @@ const Tabs = class Tabs extends Component {
         activeIndex: PropTypes.number,
         onChange: PropTypes.func,
         tabPosition: PropTypes.oneOf(['top', 'bottom']),
-        type: PropTypes.oneOf(['line', 'swipe']),
+        type: PropTypes.oneOf(['table', 'swipe']),
         options: PropTypes.object,
     }
 
@@ -23,7 +23,7 @@ const Tabs = class Tabs extends Component {
         activeIndex: 0,
         onChange: () => { },
         tabPosition: 'top',
-        type: 'line',
+        type: 'table',
         options: {}
     }
 
@@ -58,7 +58,7 @@ const Tabs = class Tabs extends Component {
                 activeIndex={this.state.activeIndex}
                 type={type}
                 options={options}
-            />
+                />
         )
     }
 
@@ -68,7 +68,7 @@ const Tabs = class Tabs extends Component {
                 onTabChange={this._handleTabChange}
                 panels={this.props.children}
                 activeIndex={this.state.activeIndex}
-            />
+                />
         )
     }
 

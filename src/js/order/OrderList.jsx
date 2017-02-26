@@ -285,7 +285,7 @@ export default class OrderList extends Component {
                         display="bottom"
                         value={0}
                         onSet={this.onSet}
-                    >
+                        >
                         {this.initOption()}
                     </mobiscroll.Select>
                 </div>

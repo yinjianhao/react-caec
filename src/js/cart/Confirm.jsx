@@ -9,6 +9,7 @@ import "./confirm.less";
 import { ScrollContainer } from 'react-router-scroll';
 import ContainerWithHeader from '../../common/component/header/ContainerWithHeader';
 import Loading from '../../common/component/loading/BaseLoading';
+import Model from '../../common/component/model/Model';
 import Checkbox from './componment/Checkbox';
 
 class InfoItem extends Component {
@@ -257,7 +258,9 @@ export default class Confirm extends Component {
         super(props);
 
         this.state = {
-            isChecked: true
+            isChecked: true,
+            modelVisible: false,
+            canBack: false,
         }
     }
 
@@ -270,7 +273,7 @@ export default class Confirm extends Component {
                     key={index}
                     index={index}
                     data={item}
-                />
+                    />
             )
         })
     }
@@ -374,6 +377,31 @@ export default class Confirm extends Component {
         })
     }
 
+    initFooter = () => {
+        return [
+            {
+                text: '取消',
+                onClick: () => {
+                    this.setState({
+                        modelVisible: false,
+                        canBack: false
+                    })
+                }
+            },
+            {
+                text: '确定',
+                onClick: () => {
+                    this.setState({
+                        modelVisible: false,
+                        canBack: true
+                    })
+
+                    this.props.router.goBack();
+                }
+            }
+        ]
+    }
+
     render() {
         const {confirmList} = this.props;
 
@@ -423,8 +451,15 @@ export default class Confirm extends Component {
                     <span className="color-default-red order-total"><span className="h5 price-symbol">¥</span><span className="h2">{price.goodsPrice}</span></span>
                     <button className="btn-sm btn-primary confirm-btn" onClick={this.handleConfirm}>提交订单({price.total})</button>
                 </div>
+                <Model
+                    title="确认"
+                    visible={this.state.modelVisible}
+                    onClose={this.close}
+                    footer={this.initFooter()}
+                    >
+                    确定要放弃此订单吗?
+				</Model>
             </ContainerWithHeader>
-
         )
     }
 
@@ -453,8 +488,15 @@ export default class Confirm extends Component {
     }
 
     routerWillLeave = (route, hook) => {
-        //会导致离开之前再次render
         if (route.pathname === '/cart') {
+
+            if (!this.state.canBack) {
+                this.setState({
+                    modelVisible: true
+                })
+                return false;
+            }
+
             setTimeout(() => {
                 this.props.dispatch({
                     type: 'CLEAN_CONFIRM'

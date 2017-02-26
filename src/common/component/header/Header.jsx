@@ -7,24 +7,13 @@ import './header.less';
 export default class Header extends Component {
 
     static propTypes = {
+        goBack: PropTypes.func,
         beforeBack: PropTypes.func,
-        title: PropTypes.string.isRequired
+        title: PropTypes.string.isRequired,
     }
 
-    constructor(props) {
-        super(props);
-
-        this._handleBack = this._handleBack.bind(this);
-    }
-
-    _handleBack(index) {
-        const {beforeBack, router} = this.props;
-
-        if (beforeBack && !beforeBack()) {
-            return;
-        }
-
-        router.goBack();
+    _handleBack = (index) => {
+        this.props.router.goBack();
     }
 
     render() {

@@ -1,25 +1,33 @@
 import Loading from './BaseLoading'
 
 let loadingInstance = null;
+let wrapEl = null;
 
 function getLoadingInstance(props) {
-    if (loadingInstance) {
-        return loadingInstance;
+    if (!loadingInstance) {
+        loadingInstance = Loading.newInstance(props);
     }
 
-    loadingInstance = Loading.newInstance(props);
     return loadingInstance;
 }
 
 const loading = {
+    open: function (props = {}) {
+        const {
+            el = document.body
+        } = props;
 
-    open: function(props) {
+        if (wrapEl !== el) {
+            this.destroy();
+        }
+        wrapEl = props.el = el;
+
         getLoadingInstance(props).open();
     },
-    close: function() {
+    close: function () {
         loadingInstance && loadingInstance.close();
     },
-    destroy: function() {
+    destroy: function () {
         if (loadingInstance) {
             loadingInstance.destroy();
             loadingInstance = null;

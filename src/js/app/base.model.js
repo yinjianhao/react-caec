@@ -2,8 +2,8 @@ import { createReducer } from 'restack-core'
 import { select } from 'redux-saga/effects'
 import _ from 'lodash'
 
-const basePath = 'https://ssl.mall.changan.com.cn';
-// const basePath = 'http://mall.changan.com.cn';
+// const basePath = 'https://ssl.mall.changan.com.cn';
+const basePath = 'http://mall.changan.com.cn';
 const baseType = 'base/ajax';
 const baseError = 'base/error';
 

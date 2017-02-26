@@ -1,0 +1,148 @@
+.ui {
+    .effect() {
+        animation-duration: 0.2s;
+        animation-fill-mode: both;
+        animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+    }
+    &-fade-enter, &-fade-appear {
+        opacity: 0;
+        .effect();
+        animation-play-state: paused;
+    }
+    &-fade-leave {
+        .effect();
+        animation-play-state: paused;
+    }
+    &-fade-enter&-fade-enter-active, &-fade-appear&-fade-appear-active {
+        animation-name: uiFadeIn;
+        animation-play-state: running;
+    }
+    &-fade-leave&-fade-leave-active {
+        animation-name: uiFadeOut;
+        animation-play-state: running;
+    }
+    @keyframes uiFadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    @keyframes uiFadeOut {
+        0% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+    &-slide-up-enter, &-slide-up-appear {
+        transform: translate(0, 100%);
+    }
+    &-slide-up-enter, &-slide-up-appear, &-slide-up-leave {
+        .effect();
+        animation-play-state: paused;
+    }
+    &-slide-up-enter&-slide-up-enter-active, &-slide-up-appear&-slide-up-appear-active {
+        animation-name: uiSlideUpIn;
+        animation-play-state: running;
+    }
+    &-slide-up-leave&-slide-up-leave-active {
+        animation-name: uiSlideUpOut;
+        animation-play-state: running;
+    }
+    @keyframes uiSlideUpIn {
+        0% {
+            transform: translate(0, 100%);
+        }
+        100% {
+            transform: translate(0, 0);
+        }
+    }
+    @keyframes uiSlideUpOut {
+        0% {
+            transform: translate(0, 0);
+        }
+        100% {
+            transform: translate(0, 100%);
+        }
+    }
+    &&-zoom-enter, &&-zoom-leave {
+        display: block;
+    }
+    &-zoom-enter, &-zoom-appear {
+        opacity: 0;
+        .effect();
+        animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        animation-play-state: paused;
+    }
+    &-zoom-leave {
+        .effect();
+        animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+        animation-play-state: paused;
+    }
+    &-zoom-enter&-zoom-enter-active, &-zoom-appear&-zoom-appear-active {
+        animation-name: uiZoomIn;
+        animation-play-state: running;
+    }
+    &-zoom-leave&-zoom-leave-active {
+        animation-name: uiZoomOut;
+        animation-play-state: running;
+    }
+    @keyframes uiZoomIn {
+        0% {
+            opacity: 0;
+            transform-origin: 50% 50%;
+            transform: scale(0, 0);
+        }
+        100% {
+            opacity: 1;
+            transform-origin: 50% 50%;
+            transform: scale(1, 1);
+        }
+    }
+    @keyframes uiZoomOut {
+        0% {
+            opacity: 1;
+            transform-origin: 50% 50%;
+            transform: scale(1, 1);
+        }
+        100% {
+            opacity: 0;
+            transform-origin: 50% 50%;
+            transform: scale(0, 0);
+        }
+    }
+    &-slide-down-enter, &-slide-down-appear {
+        transform: translate(0, -100%);
+    }
+    &-slide-down-enter, &-slide-down-appear, &-slide-down-leave {
+        .effect();
+        animation-play-state: paused;
+    }
+    &-slide-down-enter&-slide-down-enter-active, &-slide-down-appear&-slide-down-appear-active {
+        animation-name: uiSlideDownIn;
+        animation-play-state: running;
+    }
+    &-slide-down-leave&-slide-down-leave-active {
+        animation-name: uiSlideDownOut;
+        animation-play-state: running;
+    }
+    @keyframes uiSlideDownIn {
+        0% {
+            transform: translate(0, -100%);
+        }
+        100% {
+            transform: translate(0, 0);
+        }
+    }
+    @keyframes uiSlideDownOut {
+        0% {
+            transform: translate(0, 0);
+        }
+        100% {
+            transform: translate(0, -100%);
+        }
+    }
+}

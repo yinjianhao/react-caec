@@ -10,9 +10,10 @@
   "dependencies": {
     "iscroll": "^5.2.0",
     "isomorphic-fetch": "^2.2.0",
-    "jquery": "^3.1.1",
     "rc-animate": "^2.3.1",
+    "rc-dialog": "^6.5.6",
     "react": "^15.3.2",
+    "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.3.2",
     "react-iscroll": "^1.1.1",
     "react-motion": "^0.4.7",

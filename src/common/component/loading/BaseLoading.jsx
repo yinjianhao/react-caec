@@ -7,33 +7,33 @@ import loadingImg from './img/dialog-loading.gif';
 export default class Loading extends Component {
 
     static propTypes = {
-        isLoading: PropTypes.bool
+        visible: PropTypes.bool
     }
 
     constructor(props) {
         super(props);
 
-        let {isLoading = false} = this.props;
+        let {visible = false} = this.props;
 
         this.state = {
-            isLoading
+            visible
         }
     }
 
     open = () => {
         this.setState({
-            isLoading: true
+            visible: true
         })
     }
 
     close = () => {
         this.setState({
-            isLoading: false
+            visible: false
         })
     }
 
     render() {
-        let classes = classNames('loading-mask', { active: this.state.isLoading });
+        let classes = classNames('loading-mask', { active: this.state.visible });
 
         return (
             <div className={classes}>
@@ -46,14 +46,14 @@ export default class Loading extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let {isLoading = this.state.isLoading} = nextProps;
+        let {visible = this.state.visible} = nextProps;
         this.setState({
-            isLoading
+            visible
         })
     }
 
-    static newInstance = (properties = { el: document.body }) => {
-        const {el, ...props} = properties;
+    static newInstance = (properties = {}) => {
+        const {el = document.body, ...props} = properties;
 
         let div = document.createElement('div');
         el.appendChild(div);
