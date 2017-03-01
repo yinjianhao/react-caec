@@ -34,23 +34,23 @@ const rootRoute = (
 			<Route path="/cart" component={Cart} onEnter={loginTest} />
 			<Route path="/my" component={My} />
 		</Route>
-		<Route path="/cart2" component={Cart} />
-		<Route path="/demo" component={Index} />
-		<Route path="/reactswipe" component={Swipe} />
-		<Route path="/iscroll" component={Iscroll} />
-		<Route path="/cartinfi" component={CartInfinite} />
-		<Route path="/ptrcart" component={PtrCart} />
-		<Route path="/confirm" component={Confirm} />
-		<Route path="/dealer(/:id)" component={Dealer} />
-		<Route path="/buyType" component={BuyType} />
-		<Route path="/invoice" component={Invoice} />
-		<Route path="/pay" component={Pay} />
-		<Route path="/info" component={Info} />
-		<Route path="/address" component={Address} />
-		<Route path="/login" component={Login} />
-		<Route path="/daq" component={Daq} />
-		<Route path="/orderlist" component={OrderList} onEnter={loginTest} />
-		<Route path="/orderdetail" component={OrderDetail} />
+		<Route path="/cart2" component={Cart} preset="slide" />
+		<Route path="/demo" component={Index} preset="slide" />
+		<Route path="/reactswipe" component={Swipe} preset="slide" />
+		<Route path="/iscroll" component={Iscroll} preset="slide" />
+		<Route path="/cartinfi" component={CartInfinite} preset="slide" />
+		<Route path="/ptrcart" component={PtrCart} preset="slide" />
+		<Route path="/confirm" component={Confirm} preset="slide" />
+		<Route path="/dealer(/:id)" component={Dealer} preset="slide" />
+		<Route path="/buyType" component={BuyType} preset="slide" />
+		<Route path="/invoice" component={Invoice} preset="slide" />
+		<Route path="/pay" component={Pay} preset="slide" />
+		<Route path="/info" component={Info} preset="slide" />
+		<Route path="/address" component={Address} preset="slide" />
+		<Route path="/login" component={Login} preset="slide" />
+		<Route path="/daq" component={Daq} preset="slide" />
+		<Route path="/orderlist" component={OrderList} onEnter={loginTest} preset="slide" />
+		<Route path="/orderdetail" component={OrderDetail} preset="slide" />
 	</Route>
 )
 

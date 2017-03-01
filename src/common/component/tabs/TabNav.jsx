@@ -8,7 +8,7 @@ export default class TabNav extends Component {
     static propTypes = {
         className: PropTypes.string,
         activeIndex: PropTypes.number,
-        type: PropTypes.oneOf(['line', 'swipe']),
+        type: PropTypes.oneOf(['table', 'swipe']),
         options: PropTypes.object,
         panels: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.node),
@@ -39,7 +39,7 @@ export default class TabNav extends Component {
                                     className={classes}
                                     key={index}
                                     onClick={onTabClick.bind(this, index)}
-                                    >
+                                >
                                     {child.props.tab}
                                     <div className="ui-tabnav-line"></div>
                                 </div>
@@ -65,7 +65,7 @@ export default class TabNav extends Component {
                                         className={classes}
                                         key={index}
                                         onClick={onTabClick.bind(this, index)}
-                                        >
+                                    >
                                         {child.props.tab}
                                         <div className="ui-tabnav-line"></div>
                                     </td>

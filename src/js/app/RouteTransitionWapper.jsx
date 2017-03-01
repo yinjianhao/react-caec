@@ -7,18 +7,17 @@ class RouteTransitionWapper extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isFrist: !0,
-			usePreset: "fade"
+			usePreset: ""
 		}
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { isFrist } = this.state;
 		const { location: { pathname, action }, presetType, routes  } = this.props;
 		const newAction = nextProps.location.action;
 		const oldRoutePrese = routes[routes.length - 1].preset;
 		const newRoutePrese = nextProps.routes[nextProps.routes.length - 1].preset;
-		let newPreset = 'fade';
+		let newPreset = '';
+
 		if ("PUSH" === newAction) {
 			switch (newRoutePrese) {
 				case 'pop': newPreset = "pop"; break;
@@ -35,16 +34,16 @@ class RouteTransitionWapper extends Component {
 		this.setState({ usePreset: newPreset })
 	}
 
-	componentDidMount() {
-		this.setState({ isFrist: !1 })
-	}
-
 	render() {
 		const { location: { pathname, action }, children, className, presetType } = this.props;
 		let wapperClass = classNames(className, "transition-wrapper"), preset;
-		const { usePreset, isFrist } = this.state;
-		preset = presets[usePreset];
-		console.warn('action -> %s, component preset: %s, final preset: %s, isFrist %s', action, presetType, usePreset, isFrist);
+		const { usePreset } = this.state;
+		preset = usePreset ? presets[usePreset] : {
+			atActive: {},
+			atEnter: {},
+			atLeave: {},
+		};
+
 		return (
 			<RouteTransition
 				component={false}
