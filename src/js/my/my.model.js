@@ -82,8 +82,6 @@ const model = {
         * login(action, { update, put, call }) {
             let { phone, psd } = action.payLoad;
 
-            console.log('login', 123123123123123123123);
-
             // const response = yield put({
             //     type: baseType,
             //     payLoad: {

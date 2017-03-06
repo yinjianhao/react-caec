@@ -1549,6 +1549,7 @@ h6, .h6, .txt-tips {
   right: 0;
   bottom: 0;
   left: 0;
+  background-color: #f5f5f5;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   -webkit-transform: translateZ(0);

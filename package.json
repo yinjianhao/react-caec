@@ -15,6 +15,7 @@
     "react": "^15.3.2",
     "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.3.2",
+    "react-fastclick": "^3.0.1",
     "react-iscroll": "^1.1.1",
     "react-motion": "^0.4.7",
     "react-redux": "^4.2.1",

@@ -13,6 +13,9 @@ import i18n from 'restack-core/lib/plugins/i18n-plugin';
 import { browserHistory, hashHistory } from 'react-router';
 
 import routes from './routes';
+import initReactFastclick from 'react-fastclick';
+
+initReactFastclick();
 
 //choose the history that meet ur need
 const app = createApp({

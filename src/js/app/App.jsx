@@ -31,7 +31,7 @@ export default class App extends Component {
 				className={wapperClass}
 				presetType={preset}
 				{...this.props}
-				/>
+			/>
 		);
 	}
 }
