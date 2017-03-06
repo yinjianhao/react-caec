@@ -16,7 +16,7 @@ export default class PtrCart extends Component {
 
     static defaultProps = {
         options: {
-            url: 'https://ssl.mall.changan.com.cn/shoppingcart/cart/info',
+            url: 'http://mall.changan.com.cn/shoppingcart/cart/info',
             type: 'GET'
         }
     }
