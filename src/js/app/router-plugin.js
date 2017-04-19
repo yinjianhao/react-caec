@@ -41,6 +41,5 @@ export default function router({ universal = false, routes, history = hashHistor
                 next();
             }
         }
-
     }
 }

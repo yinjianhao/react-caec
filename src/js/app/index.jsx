@@ -17,6 +17,9 @@ import initReactFastclick from 'react-fastclick';
 
 initReactFastclick();
 
+import Perf from 'react-addons-perf';
+window.Perf = Perf
+
 //choose the history that meet ur need
 const app = createApp({
 	plugins: [

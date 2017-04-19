@@ -34,23 +34,23 @@ const rootRoute = (
 			<Route path="/cart" component={Cart} onEnter={loginTest} />
 			<Route path="/my" component={My} />
 		</Route>
-		<Route path="/cart2" component={Cart} preset="fade" />
-		<Route path="/demo" component={Index} preset="fade" />
-		<Route path="/reactswipe" component={Swipe} preset="fade" />
-		<Route path="/iscroll" component={Iscroll} preset="fade" />
-		<Route path="/cartinfi" component={CartInfinite} preset="fade" />
-		<Route path="/ptrcart" component={PtrCart} preset="fade" />
-		<Route path="/confirm" component={Confirm} preset="fade" />
-		<Route path="/dealer(/:id)" component={Dealer} preset="fade" />
-		<Route path="/buyType" component={BuyType} preset="fade" />
-		<Route path="/invoice" component={Invoice} preset="fade" />
-		<Route path="/pay" component={Pay} preset="fade" />
-		<Route path="/info" component={Info} preset="fade" />
-		<Route path="/address" component={Address} preset="fade" />
-		<Route path="/login" component={Login} preset="fade" />
-		<Route path="/daq" component={Daq} preset="fade" />
-		<Route path="/orderlist" component={OrderList} onEnter={loginTest} preset="fade" />
-		<Route path="/orderdetail" component={OrderDetail} preset="fade" />
+		<Route path="/cart2" component={Cart} preset="slide" />
+		<Route path="/demo" component={Index} preset="slide" />
+		<Route path="/reactswipe" component={Swipe} preset="slide" />
+		<Route path="/iscroll" component={Iscroll} preset="slide" />
+		<Route path="/cartinfi" component={CartInfinite} preset="slide" />
+		<Route path="/ptrcart" component={PtrCart} preset="slide" />
+		<Route path="/confirm" component={Confirm} preset="slide" />
+		<Route path="/dealer(/:id)" component={Dealer} preset="slide" />
+		<Route path="/buyType" component={BuyType} preset="slide" />
+		<Route path="/invoice" component={Invoice} preset="slide" />
+		<Route path="/pay" component={Pay} preset="slide" />
+		<Route path="/info" component={Info} preset="slide" />
+		<Route path="/address" component={Address} preset="slide" />
+		<Route path="/login" component={Login} preset="slide" />
+		<Route path="/daq" component={Daq} preset="slide" />
+		<Route path="/orderlist" component={OrderList} onEnter={loginTest} preset="slide" />
+		<Route path="/orderdetail" component={OrderDetail} preset="slide" />
 	</Route>
 )
 

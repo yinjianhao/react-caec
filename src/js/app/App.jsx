@@ -25,6 +25,11 @@ export default class App extends Component {
 		const { children, location, route } = this.props;
 		const wapperClass = classNames('transition-wrapper', { 'ios-platform': isIOS, 'android-platform': isAndroid });
 		let preset = "";
+		return (
+			<div>
+				{this.props.children}
+			</div>
+		)
 
 		return (
 			<RTWapper
